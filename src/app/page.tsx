@@ -4,11 +4,11 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { Header } from '@/components/Header';
 import { LocationBar } from '@/components/LocationBar';
 import { PersonaSwitcher } from '@/components/PersonaSwitcher';
-import { AqiHeroCard } from '@/components/AqiHeroCard';
+import { AqiInHeroSection } from '@/components/AqiInHeroSection';
+import { MajorPollutantsGrid } from '@/components/MajorPollutantsGrid';
 import { QuickDecisionGrid } from '@/components/QuickDecisionGrid';
 import { InversionVisualizer } from '@/components/InversionVisualizer';
 import { ParticleScaleVisualizer } from '@/components/ParticleScaleVisualizer';
-import { TelemetryGrid } from '@/components/TelemetryGrid';
 import { TodayRoutine } from '@/components/TodayRoutine';
 import { IndoorHacks } from '@/components/IndoorHacks';
 import { DirectImpact } from '@/components/DirectImpact';
@@ -127,7 +127,7 @@ export default function HomePage() {
     }
   };
 
-  // Browser Geolocation Auto-Detection with graceful fallback
+  // Browser Geolocation Auto-Detection
   const handleAutoDetect = () => {
     if (!('geolocation' in navigator)) {
       setLocationError(lang === 'hi' ? 'आपके ब्राउज़र में GPS सपोर्ट नहीं है।' : 'Geolocation is not supported by your browser.');
@@ -178,7 +178,7 @@ export default function HomePage() {
   };
 
   return (
-    <>
+    <div className="min-h-screen bg-[#F8FAFC] text-slate-800">
       <Header
         snapshot={snapshot}
         profile={currentProfile}
@@ -187,7 +187,7 @@ export default function HomePage() {
         onOpenCopilot={() => handleOpenCopilot()}
       />
 
-      <main className="flex-1 w-full max-w-4xl mx-auto pt-20 pb-28 px-4 sm:px-6">
+      <main className="w-full max-w-5xl mx-auto pt-20 pb-28 px-4 sm:px-6 space-y-5">
         {/* Location & Station Status Bar */}
         <LocationBar
           currentLocation={currentLocation}
@@ -199,8 +199,8 @@ export default function HomePage() {
           locationError={locationError}
         />
 
-        {/* Active Persona Switcher Pills */}
-        <div className="mt-2.5 mb-4">
+        {/* Persona Switcher Pills */}
+        <div className="pt-1">
           <PersonaSwitcher
             currentProfile={currentProfile}
             lang={lang}
@@ -208,10 +208,10 @@ export default function HomePage() {
           />
         </div>
 
-        {/* Honest Error State & Recovery Banner */}
+        {/* Error State Banner */}
         {aqiError && (
           <div
-            className="mb-4 p-4 rounded-xl bg-error-container text-on-error-container border border-error/20 flex items-center justify-between flex-wrap gap-3"
+            className="p-4 rounded-xl bg-error-container text-on-error-container border border-error/20 flex items-center justify-between flex-wrap gap-3"
             role="alert"
           >
             <div className="flex items-center gap-2">
@@ -239,32 +239,52 @@ export default function HomePage() {
 
         {/* Loading Skeletons */}
         {isLoadingAQI && !snapshot && (
-          <div className="space-y-4 animate-pulse" aria-live="polite" aria-label="Loading live telemetry">
-            <div className="w-full h-44 bg-surface-container-high rounded-2xl"></div>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="h-28 bg-surface-container-high rounded-xl"></div>
-              <div className="h-28 bg-surface-container-high rounded-xl"></div>
+          <div className="space-y-4 animate-pulse" aria-live="polite">
+            <div className="w-full h-56 bg-slate-200 rounded-2xl"></div>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div className="h-28 bg-slate-200 rounded-xl"></div>
+              <div className="h-28 bg-slate-200 rounded-xl"></div>
+              <div className="h-28 bg-slate-200 rounded-xl"></div>
             </div>
           </div>
         )}
 
-        {/* Main Tab Content */}
+        {/* Loaded Main Experience */}
         {snapshot && (
-          <div className="space-y-4">
+          <div className="space-y-6">
             {activeTab === 'today' && (
               <>
-                <AqiHeroCard snapshot={snapshot} profile={currentProfile} lang={lang} />
+                {/* 1. Ultra-clean AQI.in style Hero Banner with live weather & scale */}
+                <AqiInHeroSection
+                  snapshot={snapshot}
+                  profile={currentProfile}
+                  lang={lang}
+                  onAutoDetectLocation={handleAutoDetect}
+                  isLocating={isLocating}
+                />
+
+                {/* 2. Major Air Pollutants Grid (AQI.in reference design) */}
+                <MajorPollutantsGrid
+                  snapshot={snapshot}
+                  lang={lang}
+                  onSelectPollutant={(p) => handleOpenCopilot(`Tell me about ${p} levels in ${snapshot.locationName} today.`)}
+                />
+
+                {/* 3. Human-first 4 Quick Life Decision Cards */}
                 <QuickDecisionGrid
                   snapshot={snapshot}
                   profile={currentProfile}
                   lang={lang}
                   onOpenCopilot={handleOpenCopilot}
                 />
-                {/* Visualizer 1: Temperature Inversion Trap Animation */}
+
+                {/* 4. Interactive Atmospheric Inversion Visualizer */}
                 <InversionVisualizer lang={lang} />
-                {/* Visualizer 2: Microscopic PM2.5 vs Human Hair Scale Graphic */}
+
+                {/* 5. Microscopic PM2.5 vs Human Hair Scale Visualizer */}
                 <ParticleScaleVisualizer lang={lang} currentPm25={snapshot.pollutants.pm25.value} />
-                <TelemetryGrid snapshot={snapshot} />
+
+                {/* 6. Today's Breath Rhythm Routine */}
                 {plan && (
                   <TodayRoutine
                     profile={currentProfile}
@@ -277,15 +297,21 @@ export default function HomePage() {
             )}
 
             {activeTab === 'decisions' && (
-              <div className="space-y-4">
+              <div className="space-y-5">
                 <QuickDecisionGrid
                   snapshot={snapshot}
                   profile={currentProfile}
                   lang={lang}
                   onOpenCopilot={handleOpenCopilot}
                 />
+                <AqiInHeroSection
+                  snapshot={snapshot}
+                  profile={currentProfile}
+                  lang={lang}
+                  onAutoDetectLocation={handleAutoDetect}
+                  isLocating={isLocating}
+                />
                 <InversionVisualizer lang={lang} />
-                <AqiHeroCard snapshot={snapshot} profile={currentProfile} lang={lang} />
               </div>
             )}
 
@@ -301,9 +327,9 @@ export default function HomePage() {
               />
             )}
 
-            {/* Informational Non-Medical Disclaimer */}
+            {/* Disclaimer */}
             <div className="pt-4 text-center">
-              <p className="text-[11px] text-on-surface-variant/70 leading-relaxed max-w-2xl mx-auto">
+              <p className="text-[11px] text-slate-400 leading-relaxed max-w-2xl mx-auto">
                 <strong>{lang === 'hi' ? 'वायुमित्र सूचना:' : 'VayuMitra Notice:'}</strong> {t.disclaimer}
               </p>
             </div>
@@ -315,14 +341,14 @@ export default function HomePage() {
       <button
         onClick={() => handleOpenCopilot()}
         aria-label="Open Ask Vayu AI Copilot"
-        className="fixed right-4 sm:right-8 bottom-20 z-40 w-14 h-14 rounded-full bg-gradient-to-r from-tertiary to-primary text-white shadow-xl flex items-center justify-center hover:scale-105 active:scale-95 transition-all focus:outline-none focus:ring-4 focus:ring-secondary/40 group"
+        className="fixed right-4 sm:right-8 bottom-20 z-40 w-14 h-14 rounded-full bg-gradient-to-r from-purple-800 to-indigo-900 text-white shadow-xl flex items-center justify-center hover:scale-105 active:scale-95 transition-all focus:outline-none focus:ring-4 focus:ring-purple-400/40 group"
         type="button"
       >
         <span className="material-symbols-outlined text-[26px] group-hover:rotate-12 transition-transform">
           auto_awesome
         </span>
-        <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-secondary border-2 border-surface animate-ping"></span>
-        <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-secondary border-2 border-surface"></span>
+        <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-400 border-2 border-white animate-ping"></span>
+        <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-400 border-2 border-white"></span>
       </button>
 
       {/* Grounded Copilot Drawer */}
@@ -351,6 +377,6 @@ export default function HomePage() {
           }
         }}
       />
-    </>
+    </div>
   );
 }

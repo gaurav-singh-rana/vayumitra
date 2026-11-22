@@ -74,6 +74,11 @@ export interface AirQualitySnapshot {
   windSpeedKmH: number;
   windDirection: string;
   dispersionRateText: string;
+  temperatureC?: number;
+  humidityPct?: number;
+  weatherCondition?: string;
+  uvIndex?: number;
+  rankInIndia?: number;
   fromCache?: boolean;
 }
 
