@@ -49,25 +49,25 @@ export const MaskDefenseCard: React.FC<MaskDefenseCardProps> = ({ lang }) => {
   const current = maskData[selectedMask];
 
   return (
-    <section className="bg-white rounded-2xl p-4 sm:p-5 shadow-sm border border-slate-200 space-y-4" aria-labelledby="mask-defense-heading">
+    <section className="bg-white rounded-2xl p-5 sm:p-6 shadow-[0_1px_3px_rgba(15,23,42,0.03)] border border-slate-200/90 space-y-4" aria-labelledby="mask-defense-heading">
       <div className="flex items-center justify-between flex-wrap gap-2">
         <div>
-          <span className="font-heading text-xs font-bold text-indigo-600 uppercase tracking-wider flex items-center gap-1.5">
-            <span className="material-symbols-outlined text-[16px]">masks</span>
+          <span className="font-heading text-xs font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1.5">
+            <span className="material-symbols-outlined text-[16px] text-slate-400">masks</span>
             {lang === 'hi' ? 'मास्क सुरक्षा गाइड' : 'Mask Filtration & Penetration Guide'}
           </span>
-          <h3 id="mask-defense-heading" className="font-heading text-base sm:text-lg font-bold text-slate-800 mt-0.5">
+          <h3 id="mask-defense-heading" className="font-heading text-base sm:text-lg font-bold text-slate-900 mt-0.5">
             {lang === 'hi' ? 'कौन सा मास्क जहरीला धुआं रोकता है?' : 'Which Mask Actually Filters Winter Smog?'}
           </h3>
         </div>
 
         {/* 3 Mask Selector Pills */}
-        <div className="flex bg-slate-100 p-1 rounded-xl gap-1 text-xs font-bold">
+        <div className="flex bg-slate-100 p-1 rounded-xl gap-1 text-xs font-bold border border-slate-200/80">
           <button
             onClick={() => setSelectedMask('n95')}
             className={`px-3 py-1.5 rounded-lg transition-all ${
               selectedMask === 'n95'
-                ? 'bg-purple-700 text-white shadow-xs'
+                ? 'bg-slate-900 text-white shadow-xs'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
             type="button"
@@ -78,7 +78,7 @@ export const MaskDefenseCard: React.FC<MaskDefenseCardProps> = ({ lang }) => {
             onClick={() => setSelectedMask('surgical')}
             className={`px-3 py-1.5 rounded-lg transition-all ${
               selectedMask === 'surgical'
-                ? 'bg-purple-700 text-white shadow-xs'
+                ? 'bg-slate-900 text-white shadow-xs'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
             type="button"
@@ -89,7 +89,7 @@ export const MaskDefenseCard: React.FC<MaskDefenseCardProps> = ({ lang }) => {
             onClick={() => setSelectedMask('cloth')}
             className={`px-3 py-1.5 rounded-lg transition-all ${
               selectedMask === 'cloth'
-                ? 'bg-purple-700 text-white shadow-xs'
+                ? 'bg-slate-900 text-white shadow-xs'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
             type="button"
@@ -100,10 +100,10 @@ export const MaskDefenseCard: React.FC<MaskDefenseCardProps> = ({ lang }) => {
       </div>
 
       {/* Selected Mask Detailed Card */}
-      <div className="p-4 rounded-xl border border-slate-200 bg-slate-50 space-y-3">
+      <div className="p-4 sm:p-5 rounded-xl border border-slate-200/80 bg-slate-50/70 space-y-3">
         <div className="flex items-center justify-between flex-wrap gap-2">
           <div className="flex items-center gap-2">
-            <span className="font-heading text-base font-bold text-slate-800">{current.name}</span>
+            <span className="font-heading text-base font-bold text-slate-900">{current.name}</span>
             <span className={`px-2.5 py-0.5 rounded-full text-xs font-bold border ${current.statusClass}`}>
               {current.status}
             </span>

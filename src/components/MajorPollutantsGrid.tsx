@@ -33,8 +33,8 @@ export const MajorPollutantsGrid: React.FC<MajorPollutantsGridProps> = ({
       value: pm25Val,
       unit: pm25?.unit ?? 'µg/m³',
       icon: 'grain',
-      borderColor: 'border-l-purple-600',
-      badgeColor: 'bg-purple-100 text-purple-700',
+      badgeColor: 'bg-rose-50 text-rose-900 border border-rose-200',
+      badgeIcon: 'warning',
       status: pm25?.statusText ?? 'High',
       danger: pm25Val > 120,
     },
@@ -44,10 +44,21 @@ export const MajorPollutantsGrid: React.FC<MajorPollutantsGridProps> = ({
       value: pm10Val,
       unit: pm10?.unit ?? 'µg/m³',
       icon: 'blur_on',
-      borderColor: 'border-l-fuchsia-500',
-      badgeColor: 'bg-fuchsia-100 text-fuchsia-700',
+      badgeColor: 'bg-amber-50 text-amber-900 border border-amber-200',
+      badgeIcon: 'warning',
       status: pm10?.statusText ?? 'Elevated',
       danger: pm10Val > 200,
+    },
+    {
+      id: 'no2',
+      name: lang === 'hi' ? 'नाइट्रोजन डाइऑक्साइड (NO2)' : 'Nitrogen Dioxide (NO2)',
+      value: no2.value,
+      unit: no2.unit,
+      icon: 'traffic',
+      badgeColor: 'bg-amber-50 text-amber-900 border border-amber-200',
+      badgeIcon: 'info',
+      status: no2.statusText,
+      danger: no2.value > 80,
     },
     {
       id: 'co',
@@ -55,8 +66,8 @@ export const MajorPollutantsGrid: React.FC<MajorPollutantsGridProps> = ({
       value: co?.value ?? 650,
       unit: co?.unit ?? 'ppb',
       icon: 'cloud',
-      borderColor: 'border-l-emerald-500',
-      badgeColor: 'bg-emerald-100 text-emerald-700',
+      badgeColor: 'bg-emerald-50 text-emerald-800 border border-emerald-200',
+      badgeIcon: 'check_circle',
       status: co?.statusText ?? 'Safe Trace Level',
       danger: false,
     },
@@ -66,21 +77,10 @@ export const MajorPollutantsGrid: React.FC<MajorPollutantsGridProps> = ({
       value: so2?.value ?? 4,
       unit: so2?.unit ?? 'ppb',
       icon: 'factory',
-      borderColor: 'border-l-teal-500',
-      badgeColor: 'bg-teal-100 text-teal-700',
+      badgeColor: 'bg-emerald-50 text-emerald-800 border border-emerald-200',
+      badgeIcon: 'check_circle',
       status: so2?.statusText ?? 'Safe Level',
       danger: false,
-    },
-    {
-      id: 'no2',
-      name: lang === 'hi' ? 'नाइट्रोजन डाइऑक्साइड (NO2)' : 'Nitrogen Dioxide (NO2)',
-      value: no2.value,
-      unit: no2.unit,
-      icon: 'traffic',
-      borderColor: 'border-l-amber-500',
-      badgeColor: 'bg-amber-100 text-amber-700',
-      status: no2.statusText,
-      danger: no2.value > 80,
     },
     {
       id: 'o3',
@@ -88,8 +88,8 @@ export const MajorPollutantsGrid: React.FC<MajorPollutantsGridProps> = ({
       value: o3?.value ?? 3,
       unit: o3?.unit ?? 'ppb',
       icon: 'wb_sunny',
-      borderColor: 'border-l-cyan-500',
-      badgeColor: 'bg-cyan-100 text-cyan-700',
+      badgeColor: 'bg-teal-50 text-teal-800 border border-teal-200',
+      badgeIcon: 'check_circle',
       status: o3?.statusText ?? 'Normal Ground Trace',
       danger: false,
     },
@@ -107,9 +107,9 @@ export const MajorPollutantsGrid: React.FC<MajorPollutantsGridProps> = ({
           </span>
         </div>
 
-        <div className="flex items-center gap-1.5 px-3 py-1 bg-sky-50 text-sky-700 rounded-full border border-sky-200 text-xs font-heading font-semibold">
-          <span className="w-2 h-2 rounded-full bg-sky-500"></span>
-          <span>CPCB Certified Feed</span>
+        <div className="flex items-center gap-1.5 px-3 py-1 bg-white text-slate-700 rounded-full border border-slate-200/90 text-xs font-heading font-semibold shadow-[0_1px_2px_rgba(0,0,0,0.02)]">
+          <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
+          <span>CPCB Certified Continuous Feed</span>
         </div>
       </div>
 
@@ -119,21 +119,27 @@ export const MajorPollutantsGrid: React.FC<MajorPollutantsGridProps> = ({
           <div
             key={item.id}
             onClick={() => onSelectPollutant?.(item.name)}
-            className={`bg-white rounded-xl p-4 border border-slate-200 shadow-xs flex items-center justify-between border-l-4 ${item.borderColor} hover:shadow-sm hover:border-slate-300 transition-all cursor-pointer group`}
+            className="bg-white rounded-xl p-4 border border-slate-200/90 shadow-[0_1px_3px_rgba(15,23,42,0.02)] flex items-center justify-between hover:shadow-sm hover:border-slate-300 transition-all cursor-pointer group"
           >
             <div className="flex items-center gap-3 min-w-0">
-              <div className="w-10 h-10 rounded-full bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-600 shrink-0 group-hover:scale-105 transition-transform">
+              <div className="w-10 h-10 rounded-xl bg-slate-50 border border-slate-100 flex items-center justify-center text-slate-600 shrink-0 group-hover:bg-slate-100 transition-colors">
                 <span className="material-symbols-outlined text-[20px]">{item.icon}</span>
               </div>
               <div className="min-w-0">
                 <span className="text-xs font-semibold text-slate-600 block truncate">
                   {item.name}
                 </span>
-                <div className="flex items-baseline gap-1 mt-0.5">
-                  <span className="font-heading text-xl sm:text-2xl font-bold text-slate-900">
+                <div className="flex items-baseline gap-2 mt-0.5">
+                  <span className="font-heading text-xl sm:text-2xl font-bold text-slate-900 tabular-nums">
                     {item.value}
                   </span>
                   <span className="text-xs text-slate-400 font-medium">{item.unit}</span>
+                </div>
+                <div className="mt-1">
+                  <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold ${item.badgeColor}`}>
+                    <span className="material-symbols-outlined text-[12px]">{item.badgeIcon}</span>
+                    <span>{item.status}</span>
+                  </span>
                 </div>
               </div>
             </div>

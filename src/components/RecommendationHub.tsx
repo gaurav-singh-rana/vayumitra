@@ -67,66 +67,66 @@ _स्त्रोत: CPCB स्टेशन ${snapshot.stationCode} | वा
 
   return (
     <section className="space-y-5" aria-labelledby="recommendation-hub-title">
-      {/* 1. Header with Persona Selector Strip */}
-      <div className="bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900 rounded-3xl p-5 sm:p-6 text-white shadow-xl relative overflow-hidden border border-indigo-800/40">
-        <div className="absolute top-0 right-0 -mr-12 -mt-12 w-48 h-48 bg-purple-500/10 rounded-full blur-3xl pointer-events-none"></div>
-
+      {/* 1. Today's Human Verdict Hero Card (Daylight-First Calm Editorial Card) */}
+      <div className="bg-white rounded-2xl p-6 sm:p-7 text-slate-800 shadow-[0_1px_3px_rgba(15,23,42,0.04),0_6px_20px_rgba(15,23,42,0.02)] relative overflow-hidden border border-slate-200/90 space-y-5">
         {/* Section Title & Subtitle */}
-        <div className="flex items-start justify-between flex-wrap gap-3 pb-4 border-b border-indigo-800/40">
-          <div>
+        <div className="flex items-start justify-between flex-wrap gap-4 pb-4 border-b border-slate-100">
+          <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-ping"></span>
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 -ml-4.5"></span>
-              <h2 id="recommendation-hub-title" className="font-heading text-lg sm:text-2xl font-black tracking-tight text-white flex items-center gap-2">
-                <span>{lang === 'hi' ? 'वायुमित्र सुरक्षा योजना' : 'Personalized Protection Plan'}</span>
-                <span className="text-xs px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-semibold border border-emerald-400/30">
-                  {lang === 'hi' ? 'लाइव सिंक' : 'Live Sync'}
-                </span>
-              </h2>
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-200 text-[11px] font-bold tracking-wider uppercase">
+                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                {lang === 'hi' ? 'दैनिक सुरक्षा निर्णय' : "Today's Human Verdict"}
+              </span>
+              <span className="text-[11px] text-slate-400 font-medium">
+                • CPCB Grounded
+              </span>
             </div>
-            <p className="text-xs sm:text-sm text-indigo-200/90 mt-1">
+            <h2 id="recommendation-hub-title" className="font-heading text-xl sm:text-2xl font-bold tracking-tight text-slate-900">
+              {verdict?.headline || (lang === 'hi' ? 'वायुमित्र सुरक्षा योजना' : 'Personalized Protection Plan')}
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-500 font-medium">
               {lang === 'hi'
-                ? `${snapshot.locationName} के लिए परिवार-विशिष्ट वैज्ञानिक सुझाव — CPCB व Open-Meteo टेलीमेट्री पर आधारित`
-                : `Household-specific protection for ${snapshot.locationName} based on verified live telemetry`}
+                ? `${snapshot.locationName} के लिए ${profile.name} हेतु व्यक्तिगत वैज्ञानिक सुरक्षा प्रोटोकॉल`
+                : `Tailored for ${profile.name} in ${snapshot.locationName} based on diurnal boundary telemetry`}
             </p>
           </div>
 
           <div className="flex items-center gap-2 flex-wrap">
             <button
               onClick={handleCopyWhatsAppBrief}
-              className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-xl font-heading text-xs font-bold transition-all shadow-md active:scale-95 ${
+              className={`inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full font-heading text-xs font-semibold transition-all border shadow-xs ${
                 copiedBrief
-                  ? 'bg-emerald-600 text-white'
-                  : 'bg-emerald-500/20 text-emerald-300 hover:bg-emerald-500/30 border border-emerald-400/40'
+                  ? 'bg-emerald-600 text-white border-emerald-700'
+                  : 'bg-white text-slate-700 hover:bg-slate-50 border-slate-200/90 hover:text-slate-900'
               }`}
               type="button"
               title="Copy WhatsApp Clean Air Advisory for Family"
             >
-              <span className="material-symbols-outlined text-[17px]">
+              <span className="material-symbols-outlined text-[16px] text-slate-500">
                 {copiedBrief ? 'check_circle' : 'share'}
               </span>
               <span>
                 {copiedBrief
                   ? (lang === 'hi' ? 'सलाह कॉपी हो गई!' : 'Advisory Copied!')
-                  : (lang === 'hi' ? 'व्हाट्सएप सलाह कॉपी करें' : 'WhatsApp Family Brief')}
+                  : (lang === 'hi' ? 'व्हाट्सएप सलाह' : 'WhatsApp Family Brief')}
               </span>
             </button>
 
             <button
               onClick={() => onOpenCopilot(`Give me personalized clean air guidance for ${profile.name} in ${snapshot.locationName} today.`)}
-              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-heading text-xs font-bold transition-all shadow-md active:scale-95"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900 hover:bg-slate-800 text-white font-heading text-xs font-semibold transition-all shadow-xs active:scale-95"
               type="button"
             >
-              <span className="material-symbols-outlined text-[18px]">auto_awesome</span>
+              <span className="material-symbols-outlined text-[16px] text-emerald-400">auto_awesome</span>
               <span>{lang === 'hi' ? 'AI वायुमित्र से पूछें' : 'Ask AI Copilot'}</span>
             </button>
           </div>
         </div>
 
         {/* 2. Interactive Persona Quick Switcher */}
-        <div className="pt-4">
-          <label className="text-xs font-semibold text-indigo-200 block mb-2">
-            {lang === 'hi' ? 'किसके लिए सुझाव चाहिए? (Select Household Profile):' : 'Select Family Member Profile:'}
+        <div className="space-y-2">
+          <label className="text-xs font-bold uppercase tracking-wider text-slate-500 block">
+            {lang === 'hi' ? 'घरेलू सदस्य चुनें:' : 'Household Health Profile:'}
           </label>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             {personaList.map((pId) => {
@@ -137,23 +137,25 @@ _स्त्रोत: CPCB स्टेशन ${snapshot.stationCode} | वा
                 <button
                   key={pId}
                   onClick={() => onSelectPersona(pId)}
-                  className={`p-2.5 sm:p-3 rounded-2xl text-left transition-all border flex items-center gap-2.5 ${
+                  className={`p-3 rounded-xl text-left transition-all border flex items-center gap-2.5 ${
                     isSelected
-                      ? 'bg-purple-600/40 border-purple-400 shadow-lg text-white ring-2 ring-purple-400/50'
-                      : 'bg-white/5 border-white/10 hover:bg-white/10 text-indigo-100/80 hover:text-white'
+                      ? 'bg-slate-900 border-slate-900 text-white shadow-xs'
+                      : 'bg-slate-50/70 border-slate-200/80 hover:bg-slate-100/70 text-slate-700'
                   }`}
                   type="button"
                 >
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-bold flex-shrink-0 ${
-                    isSelected ? 'bg-purple-500 text-white' : 'bg-white/10 text-indigo-200'
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-sm font-bold flex-shrink-0 ${
+                    isSelected ? 'bg-white/15 text-white' : 'bg-white text-slate-600 border border-slate-200/80'
                   }`}>
-                    {p.id === 'parents_young_children' ? '🧒' : p.id === 'seniors_respiratory' ? '🧓' : p.id === 'daily_commuter' ? '🛵' : '🏡'}
+                    <span className="material-symbols-outlined text-[18px]">
+                      {p.icon}
+                    </span>
                   </div>
                   <div className="min-w-0">
                     <p className="font-heading text-xs font-bold truncate leading-snug">
                       {p.name}
                     </p>
-                    <p className="text-[10px] text-indigo-200/70 truncate">
+                    <p className={`text-[10px] truncate ${isSelected ? 'text-slate-300' : 'text-slate-500'}`}>
                       {lang === 'hi' ? p.hindiLabel.split('(')[0] : p.label.split('(')[0]}
                     </p>
                   </div>
@@ -164,57 +166,69 @@ _स्त्रोत: CPCB स्टेशन ${snapshot.stationCode} | वा
         </div>
 
         {/* 3. Shielding Impact Telemetry Strip */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 mt-4 pt-4 border-t border-indigo-800/40">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-2">
           {/* Spared Passive Cigarettes */}
-          <div className="bg-white/5 rounded-xl p-3 border border-white/10">
-            <span className="text-[10px] uppercase tracking-wider text-amber-300 font-bold block">
-              {lang === 'hi' ? 'बचाए गए सिगरेट' : 'Spared Cigarettes'}
-            </span>
-            <div className="font-heading text-base sm:text-lg font-black text-white mt-0.5">
+          <div className="bg-slate-50/70 rounded-xl p-3.5 border border-slate-200/80">
+            <div className="flex items-center gap-1 text-slate-500">
+              <span className="material-symbols-outlined text-[16px] text-amber-600">smoke_free</span>
+              <span className="text-[10px] uppercase tracking-wider font-bold">
+                {lang === 'hi' ? 'बचाए गए सिगरेट' : 'Spared Cigarettes'}
+              </span>
+            </div>
+            <div className="font-heading text-lg sm:text-xl font-bold text-slate-900 mt-1 tabular-nums">
               {verdict?.sparedCigarettesEquiv || `≈ ${Math.max(1, Math.round(pm25Val / 22))} cigarettes`}
             </div>
-            <span className="text-[10px] text-indigo-200/70 block mt-0.5">
+            <span className="text-[10px] text-slate-500 block mt-0.5">
               {lang === 'hi' ? 'धुएं के बराबर बचाव' : 'Passive smoke avoided'}
             </span>
           </div>
 
           {/* Spared PM2.5 Soot */}
-          <div className="bg-white/5 rounded-xl p-3 border border-white/10">
-            <span className="text-[10px] uppercase tracking-wider text-emerald-300 font-bold block">
-              {lang === 'hi' ? 'रोका गया PM2.5' : 'Spared PM2.5'}
-            </span>
-            <div className="font-heading text-base sm:text-lg font-black text-white mt-0.5">
+          <div className="bg-slate-50/70 rounded-xl p-3.5 border border-slate-200/80">
+            <div className="flex items-center gap-1 text-slate-500">
+              <span className="material-symbols-outlined text-[16px] text-emerald-600">air</span>
+              <span className="text-[10px] uppercase tracking-wider font-bold">
+                {lang === 'hi' ? 'रोका गया PM2.5' : 'Spared PM2.5'}
+              </span>
+            </div>
+            <div className="font-heading text-lg sm:text-xl font-bold text-slate-900 mt-1 tabular-nums">
               {verdict?.sparedPm25 || `${Math.round(pm25Val * 0.65)} µg/day`}
             </div>
-            <span className="text-[10px] text-indigo-200/70 block mt-0.5">
+            <span className="text-[10px] text-slate-500 block mt-0.5">
               {lang === 'hi' ? 'फेफड़ों में जाने से रोका' : 'Direct lung defense'}
             </span>
           </div>
 
           {/* Clean Air Score */}
-          <div className="bg-white/5 rounded-xl p-3 border border-white/10">
-            <span className="text-[10px] uppercase tracking-wider text-purple-300 font-bold block">
-              {lang === 'hi' ? 'सुरक्षा स्कोर' : 'Protection Score'}
-            </span>
-            <div className="font-heading text-base sm:text-lg font-black text-white mt-0.5 flex items-baseline gap-1">
-              <span>{verdict?.score || 84}</span>
-              <span className="text-xs text-indigo-200 font-normal">/ 100</span>
+          <div className="bg-slate-50/70 rounded-xl p-3.5 border border-slate-200/80">
+            <div className="flex items-center gap-1 text-slate-500">
+              <span className="material-symbols-outlined text-[16px] text-sky-600">verified_user</span>
+              <span className="text-[10px] uppercase tracking-wider font-bold">
+                {lang === 'hi' ? 'सुरक्षा स्कोर' : 'Protection Score'}
+              </span>
             </div>
-            <span className="text-[10px] text-indigo-200/70 block mt-0.5">
+            <div className="font-heading text-lg sm:text-xl font-bold text-slate-900 mt-1 flex items-baseline gap-1 tabular-nums">
+              <span>{verdict?.score || 84}</span>
+              <span className="text-xs text-slate-500 font-normal">/ 100</span>
+            </div>
+            <span className="text-[10px] text-slate-500 block mt-0.5">
               {verdict?.rankTitle || 'Clean Air Sentinel'}
             </span>
           </div>
 
           {/* Averted CO2 */}
-          <div className="bg-white/5 rounded-xl p-3 border border-white/10">
-            <span className="text-[10px] uppercase tracking-wider text-cyan-300 font-bold block">
-              {lang === 'hi' ? 'CO2 बचत' : 'Averted CO2'}
-            </span>
-            <div className="font-heading text-base sm:text-lg font-black text-white mt-0.5">
+          <div className="bg-slate-50/70 rounded-xl p-3.5 border border-slate-200/80">
+            <div className="flex items-center gap-1 text-slate-500">
+              <span className="material-symbols-outlined text-[16px] text-teal-600">eco</span>
+              <span className="text-[10px] uppercase tracking-wider font-bold">
+                {lang === 'hi' ? 'CO2 बचत' : 'Averted CO2'}
+              </span>
+            </div>
+            <div className="font-heading text-lg sm:text-xl font-bold text-slate-900 mt-1 tabular-nums">
               {verdict?.avertedCo2 || '4.2 kg'}
             </div>
-            <span className="text-[10px] text-indigo-200/70 block mt-0.5">
-              {lang === 'hi' ? 'मेट्रो व ई-वाहन से' : 'via clean commute'}
+            <span className="text-[10px] text-slate-500 block mt-0.5">
+              {lang === 'hi' ? 'स्वच्छ आवागमन से' : 'via clean commute'}
             </span>
           </div>
         </div>
@@ -229,39 +243,39 @@ _स्त्रोत: CPCB स्टेशन ${snapshot.stationCode} | वा
       />
 
       {/* 3. Three-Pillar Action Center Navigation Pills */}
-      <div className="bg-white rounded-2xl p-2 shadow-sm border border-slate-200 flex items-center justify-between gap-1 overflow-x-auto scrollbar-none">
+      <div className="bg-white rounded-2xl p-1.5 shadow-[0_1px_2px_rgba(0,0,0,0.02)] border border-slate-200/90 flex items-center justify-between gap-1 overflow-x-auto scrollbar-none">
         <button
           onClick={() => setActiveSubTab('routine')}
-          className={`flex items-center gap-1.5 px-4 py-2.5 rounded-xl font-heading text-xs sm:text-sm font-bold whitespace-nowrap transition-all ${
+          className={`flex items-center gap-1.5 px-4 py-2 rounded-xl font-heading text-xs sm:text-sm font-semibold whitespace-nowrap transition-all ${
             activeSubTab === 'routine'
-              ? 'bg-purple-700 text-white shadow-md'
-              : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+              ? 'bg-slate-900 text-white shadow-xs'
+              : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
           }`}
           type="button"
         >
           <span className="material-symbols-outlined text-[18px]">schedule</span>
-          <span>{lang === 'hi' ? '1. आज की दिनचर्या' : '1. Daily Rhythm'}</span>
+          <span>{lang === 'hi' ? '1. दैनिक दिनचर्या' : '1. Daily Rhythm'}</span>
         </button>
 
         <button
           onClick={() => setActiveSubTab('indoor')}
-          className={`flex items-center gap-1.5 px-4 py-2.5 rounded-xl font-heading text-xs sm:text-sm font-bold whitespace-nowrap transition-all ${
+          className={`flex items-center gap-1.5 px-4 py-2 rounded-xl font-heading text-xs sm:text-sm font-semibold whitespace-nowrap transition-all ${
             activeSubTab === 'indoor'
-              ? 'bg-purple-700 text-white shadow-md'
-              : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+              ? 'bg-slate-900 text-white shadow-xs'
+              : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
           }`}
           type="button"
         >
           <span className="material-symbols-outlined text-[18px]">home</span>
-          <span>{lang === 'hi' ? '2. घर के जुगाड़ व खिड़की' : '2. Indoor Hacks & Seal'}</span>
+          <span>{lang === 'hi' ? '2. इनडोर हैक्स व सील' : '2. Indoor Hacks & Seal'}</span>
         </button>
 
         <button
           onClick={() => setActiveSubTab('impact')}
-          className={`flex items-center gap-1.5 px-4 py-2.5 rounded-xl font-heading text-xs sm:text-sm font-bold whitespace-nowrap transition-all ${
+          className={`flex items-center gap-1.5 px-4 py-2 rounded-xl font-heading text-xs sm:text-sm font-semibold whitespace-nowrap transition-all ${
             activeSubTab === 'impact'
-              ? 'bg-purple-700 text-white shadow-md'
-              : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+              ? 'bg-slate-900 text-white shadow-xs'
+              : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
           }`}
           type="button"
         >
@@ -271,10 +285,10 @@ _स्त्रोत: CPCB स्टेशन ${snapshot.stationCode} | वा
 
         <button
           onClick={() => setActiveSubTab('science')}
-          className={`flex items-center gap-1.5 px-4 py-2.5 rounded-xl font-heading text-xs sm:text-sm font-bold whitespace-nowrap transition-all ${
+          className={`flex items-center gap-1.5 px-4 py-2 rounded-xl font-heading text-xs sm:text-sm font-semibold whitespace-nowrap transition-all ${
             activeSubTab === 'science'
-              ? 'bg-purple-700 text-white shadow-md'
-              : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+              ? 'bg-slate-900 text-white shadow-xs'
+              : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
           }`}
           type="button"
         >

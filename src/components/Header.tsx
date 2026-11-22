@@ -53,12 +53,12 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <header className="fixed top-0 w-full z-40 bg-surface/90 backdrop-blur-xl shadow-[0_1px_8px_rgba(15,76,92,0.05)] pt-safe border-b border-surface-container">
-      <div className="max-w-4xl mx-auto h-16 px-4 sm:px-6 flex items-center justify-between">
+    <header className="fixed top-0 w-full z-40 bg-white/95 backdrop-blur-md shadow-[0_1px_3px_rgba(15,23,42,0.04)] pt-safe border-b border-slate-200/80">
+      <div className="max-w-5xl mx-auto h-16 px-4 sm:px-6 flex items-center justify-between">
         {/* Brand & Live Source Provenance */}
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-3">
           {/* Logo Mark Icon */}
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-sky-500 via-teal-500 to-emerald-500 p-0.5 shadow-md flex items-center justify-center flex-shrink-0">
+          <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-sky-500 via-teal-500 to-emerald-500 p-0.5 shadow-sm flex items-center justify-center flex-shrink-0">
             <div className="w-full h-full bg-slate-900 rounded-[10px] flex items-center justify-center">
               <svg className="w-6 h-6" viewBox="0 0 32 32" fill="none">
                 <circle cx="16" cy="16" r="12" stroke="#38bdf8" strokeWidth="1.5" strokeDasharray="2 2" opacity="0.6" />
@@ -69,14 +69,14 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
 
           <div className="flex flex-col">
-            <div className="flex items-center gap-1 leading-none">
-              <span className="font-heading font-black text-2xl tracking-tighter bg-gradient-to-r from-sky-600 via-cyan-600 to-teal-600 bg-clip-text text-transparent">
+            <div className="flex items-center gap-1.5 leading-none">
+              <span className="font-heading font-black text-2xl tracking-tighter text-slate-900">
                 AQI
               </span>
-              <span className="font-heading font-extrabold text-base sm:text-lg text-slate-800 tracking-tight ml-0.5">
+              <span className="font-heading font-extrabold text-base sm:text-lg text-slate-800 tracking-tight">
                 VayuMitra
               </span>
-              <span className="text-[10px] px-1.5 py-0.5 rounded bg-sky-100 text-sky-700 font-bold ml-1 uppercase">
+              <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-slate-100 text-slate-700 font-bold tracking-wider border border-slate-200 uppercase">
                 .IN
               </span>
             </div>
@@ -85,7 +85,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
               </span>
-              <span className="text-[11px] text-slate-500 font-semibold tracking-wide truncate max-w-[160px] sm:max-w-none">
+              <span className="text-[11px] text-slate-500 font-medium tracking-wide truncate max-w-[160px] sm:max-w-none">
                 {snapshot ? snapshot.sourceName : t.liveBadge}
               </span>
             </div>
@@ -97,30 +97,30 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Language Switcher Button */}
           <button
             onClick={onToggleLang}
-            className="px-2.5 py-1.5 rounded-full bg-surface-container-high hover:bg-surface-container-highest text-primary font-heading text-xs font-bold transition-all border border-surface-container flex items-center gap-1 min-h-[36px]"
+            className="px-3 py-1.5 rounded-full bg-slate-50 hover:bg-slate-100 text-slate-700 font-heading text-xs font-semibold transition-all border border-slate-200 flex items-center gap-1.5 min-h-[36px]"
             type="button"
             aria-label="Toggle language between English and Hindi"
             title="Switch Language / भाषा बदलें"
           >
-            <span className="material-symbols-outlined text-[16px]">translate</span>
-            <span>{lang === 'hi' ? 'EN' : 'हिं'}</span>
+            <span className="material-symbols-outlined text-[16px] text-slate-500">translate</span>
+            <span>{lang === 'hi' ? 'English' : 'हिन्दी'}</span>
           </button>
 
           {/* Voice Narration Button */}
           <button
             onClick={handleSpeakReport}
             aria-label={isPlaying ? 'Stop audio report' : t.sunoBtn}
-            className={`min-w-[44px] min-h-[40px] px-3 rounded-full flex items-center justify-center gap-1.5 transition-all focus:outline-none focus-visible:ring-2 ${
+            className={`min-w-[44px] min-h-[36px] px-3.5 rounded-full flex items-center justify-center gap-1.5 transition-all focus:outline-none border ${
               isPlaying
-                ? 'bg-secondary text-on-secondary shadow-md animate-pulse'
-                : 'bg-secondary-container/40 text-on-secondary-container hover:bg-secondary-container/70'
+                ? 'bg-emerald-700 text-white border-emerald-800 shadow-sm animate-pulse'
+                : 'bg-emerald-50 text-emerald-800 border-emerald-200/80 hover:bg-emerald-100'
             }`}
             type="button"
           >
             <span className="material-symbols-outlined text-[18px]">
               {isPlaying ? 'volume_off' : 'volume_up'}
             </span>
-            <span className="font-heading text-xs font-bold hidden sm:inline">
+            <span className="font-heading text-xs font-semibold hidden sm:inline">
               {isPlaying ? t.sunoPlaying : t.sunoBtn}
             </span>
           </button>
@@ -129,11 +129,11 @@ export const Header: React.FC<HeaderProps> = ({
           <button
             onClick={onOpenCopilot}
             aria-label={`Open Ask VayuMitra for ${profile.name}`}
-            className="w-10 h-10 rounded-full bg-primary text-on-primary flex items-center justify-center shadow-sm hover:bg-primary-container transition-transform active:scale-95 focus:outline-none"
+            className="w-9 h-9 rounded-full bg-slate-900 text-white flex items-center justify-center shadow-xs hover:bg-slate-800 transition-transform active:scale-95 focus:outline-none"
             type="button"
             title={profile.name}
           >
-            <span className="material-symbols-outlined text-[20px]">{profile.icon}</span>
+            <span className="material-symbols-outlined text-[18px]">{profile.icon}</span>
           </button>
         </div>
       </div>

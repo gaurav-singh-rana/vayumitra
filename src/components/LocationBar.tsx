@@ -98,30 +98,30 @@ export const LocationBar: React.FC<LocationBarProps> = ({
           aria-label={`Current location: ${currentLocation.name}. Click to switch Indian city.`}
         >
           <span
-            className="material-symbols-outlined text-primary text-[24px]"
+            className="material-symbols-outlined text-slate-900 text-[22px]"
             style={{ fontVariationSettings: "'FILL' 1" }}
           >
             location_on
           </span>
-          <span className="font-heading text-lg sm:text-xl text-primary font-bold tracking-tight group-hover:text-primary-container">
+          <span className="font-heading text-lg sm:text-xl text-slate-900 font-bold tracking-tight group-hover:text-slate-700">
             {currentLocation.name}
           </span>
-          <span className="material-symbols-outlined text-on-surface-variant text-[20px] group-hover:translate-y-0.5 transition-transform">
+          <span className="material-symbols-outlined text-slate-400 text-[20px] group-hover:translate-y-0.5 transition-transform">
             expand_more
           </span>
         </button>
 
         {/* Live Station & Timestamp Provenance Pill */}
         <div
-          className="flex items-center gap-1.5 px-3 py-1 bg-surface-container-lowest rounded-full shadow-sm border border-surface-container"
+          className="flex items-center gap-1.5 px-3 py-1 bg-white rounded-full shadow-[0_1px_2px_rgba(15,23,42,0.04)] border border-slate-200/80"
           aria-live="polite"
         >
           <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-secondary opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-secondary"></span>
+            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
+            <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
           </span>
-          <span className="font-heading text-xs text-on-surface-variant font-medium">
-            {snapshot ? `${snapshot.stationCode} • ${formatTimestamp(snapshot.timestamp)}` : 'Connecting...'}
+          <span className="font-heading text-xs text-slate-600 font-medium tabular-nums">
+            {snapshot ? `${snapshot.stationCode} • ${formatTimestamp(snapshot.timestamp)}` : 'Connecting telemetry...'}
           </span>
         </div>
       </div>

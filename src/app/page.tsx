@@ -442,14 +442,72 @@ export default function HomePage() {
           </div>
         )}
 
-        {/* Loading Skeletons */}
+        {/* Elevated Connecting & Loading States (Structured Skeletons with Polite ARIA) */}
         {isLoadingAQI && !snapshot && (
-          <div className="space-y-4 animate-pulse" aria-live="polite">
-            <div className="w-full h-56 bg-slate-200 rounded-2xl"></div>
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <div className="h-28 bg-slate-200 rounded-xl"></div>
-              <div className="h-28 bg-slate-200 rounded-xl"></div>
-              <div className="h-28 bg-slate-200 rounded-xl"></div>
+          <div className="space-y-6" aria-live="polite">
+            {/* Polite Status Announcement */}
+            <div className="p-3 rounded-xl bg-white border border-slate-200/90 shadow-xs flex items-center gap-3">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+              </span>
+              <p className="text-xs text-slate-600 font-medium">
+                {lang === 'hi'
+                  ? 'CPCB व Open-Meteo टेलीमेट्री से रीयल-टाइम एयर क्वालिटी डेटा लोड हो रहा है...'
+                  : 'Connecting to CPCB CAAQMS Continuous Telemetry Hub & calculating personalized protection plan...'}
+              </p>
+            </div>
+
+            {/* Hero Card Skeleton */}
+            <div className="w-full bg-white rounded-2xl p-6 sm:p-7 border border-slate-200/90 shadow-[0_1px_3px_rgba(15,23,42,0.03)] space-y-6 animate-pulse">
+              <div className="flex items-start justify-between flex-wrap gap-4">
+                <div className="space-y-2">
+                  <div className="h-4 w-28 bg-slate-200 rounded-full"></div>
+                  <div className="h-8 w-64 bg-slate-200 rounded-lg"></div>
+                  <div className="h-3 w-44 bg-slate-100 rounded-md"></div>
+                </div>
+                <div className="h-20 w-48 bg-slate-100 rounded-xl"></div>
+              </div>
+
+              <div className="space-y-3 pt-2">
+                <div className="flex items-baseline gap-4">
+                  <div className="h-14 w-28 bg-slate-200 rounded-xl"></div>
+                  <div className="h-6 w-36 bg-slate-200 rounded-full"></div>
+                </div>
+                <div className="h-2.5 w-full bg-slate-100 rounded-full"></div>
+              </div>
+            </div>
+
+            {/* Pollutants Grid Skeleton */}
+            <div className="space-y-3">
+              <div className="h-5 w-48 bg-slate-200 rounded-md"></div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 animate-pulse">
+                {[...Array(6)].map((_, i) => (
+                  <div key={i} className="h-24 bg-white rounded-xl p-4 border border-slate-200/90 flex items-center justify-between">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-slate-100"></div>
+                      <div className="space-y-1.5">
+                        <div className="h-3 w-24 bg-slate-200 rounded"></div>
+                        <div className="h-5 w-16 bg-slate-200 rounded"></div>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Recommendation Modules Skeleton */}
+            <div className="bg-white rounded-2xl p-6 border border-slate-200/90 space-y-4 animate-pulse">
+              <div className="h-6 w-56 bg-slate-200 rounded-md"></div>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="h-20 bg-slate-50 rounded-xl p-3 border border-slate-100"></div>
+                ))}
+              </div>
+              <div className="space-y-3 pt-2">
+                <div className="h-28 bg-slate-50 rounded-xl"></div>
+                <div className="h-28 bg-slate-50 rounded-xl"></div>
+              </div>
             </div>
           </div>
         )}
@@ -557,10 +615,10 @@ export default function HomePage() {
       <button
         onClick={() => handleOpenCopilot()}
         aria-label="Open Ask Vayu AI Copilot"
-        className="fixed right-4 sm:right-8 bottom-20 z-40 w-14 h-14 rounded-full bg-gradient-to-r from-purple-800 to-indigo-900 text-white shadow-xl flex items-center justify-center hover:scale-105 active:scale-95 transition-all focus:outline-none focus:ring-4 focus:ring-purple-400/40 group"
+        className="fixed right-4 sm:right-8 bottom-20 z-40 w-13 h-13 rounded-full bg-slate-900 text-white shadow-xl border border-slate-700/60 flex items-center justify-center hover:scale-105 active:scale-95 transition-all focus:outline-none focus:ring-4 focus:ring-slate-400/30 group"
         type="button"
       >
-        <span className="material-symbols-outlined text-[26px] group-hover:rotate-12 transition-transform">
+        <span className="material-symbols-outlined text-[24px] text-emerald-400 group-hover:rotate-12 transition-transform">
           auto_awesome
         </span>
         <span className="absolute -top-1 -right-1 w-3.5 h-3.5 rounded-full bg-emerald-400 border-2 border-white animate-ping"></span>
