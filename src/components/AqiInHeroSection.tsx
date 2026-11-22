@@ -19,14 +19,14 @@ export const AqiInHeroSection: React.FC<AqiInHeroSectionProps> = ({
   onAutoDetectLocation,
   isLocating,
 }) => {
-  const aqi = snapshot.aqi;
-  const pm25Val = snapshot.pollutants.pm25.value;
-  const pm10Val = snapshot.pollutants.pm10.value;
-  const temp = snapshot.temperatureC ?? 24;
-  const humidity = snapshot.humidityPct ?? 48;
-  const wind = snapshot.windSpeedKmH ?? 3.6;
-  const weatherCond = snapshot.weatherCondition ?? 'Sunny';
-  const rank = snapshot.rankInIndia ?? 9;
+  const aqi = snapshot?.aqi ?? 150;
+  const pm25Val = snapshot?.pollutants?.pm25?.value ?? Math.round(aqi * 0.7);
+  const pm10Val = snapshot?.pollutants?.pm10?.value ?? Math.round(aqi * 0.9);
+  const temp = snapshot?.temperatureC ?? 24;
+  const humidity = snapshot?.humidityPct ?? 48;
+  const wind = snapshot?.windSpeedKmH ?? 3.6;
+  const weatherCond = snapshot?.weatherCondition ?? 'Sunny';
+  const rank = snapshot?.rankInIndia ?? 9;
 
   // Format updated timestamp
   const formatTime = (ts?: string) => {

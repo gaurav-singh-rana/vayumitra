@@ -15,30 +15,39 @@ export const MajorPollutantsGrid: React.FC<MajorPollutantsGridProps> = ({
   lang,
   onSelectPollutant,
 }) => {
-  const { pm25, pm10, no2, so2, co, o3 } = snapshot.pollutants;
+  const safeAqi = snapshot?.aqi ?? 150;
+  const pm25 = snapshot?.pollutants?.pm25;
+  const pm10 = snapshot?.pollutants?.pm10;
+  const no2 = snapshot?.pollutants?.no2;
+  const so2 = snapshot?.pollutants?.so2;
+  const co = snapshot?.pollutants?.co;
+  const o3 = snapshot?.pollutants?.o3;
+
+  const pm25Val = pm25?.value ?? Math.round(safeAqi * 0.7);
+  const pm10Val = pm10?.value ?? Math.round(safeAqi * 0.9);
 
   const pollutantsList = [
     {
       id: 'pm25',
       name: lang === 'hi' ? 'पार्टिकुलेट मैटर (PM2.5)' : 'Particulate Matter (PM2.5)',
-      value: pm25.value,
-      unit: pm25.unit,
+      value: pm25Val,
+      unit: pm25?.unit ?? 'µg/m³',
       icon: 'grain',
       borderColor: 'border-l-purple-600',
       badgeColor: 'bg-purple-100 text-purple-700',
-      status: pm25.statusText,
-      danger: pm25.value > 120,
+      status: pm25?.statusText ?? 'High',
+      danger: pm25Val > 120,
     },
     {
       id: 'pm10',
       name: lang === 'hi' ? 'पार्टिकुलेट मैटर (PM10)' : 'Particulate Matter (PM10)',
-      value: pm10.value,
-      unit: pm10.unit,
+      value: pm10Val,
+      unit: pm10?.unit ?? 'µg/m³',
       icon: 'blur_on',
       borderColor: 'border-l-fuchsia-500',
       badgeColor: 'bg-fuchsia-100 text-fuchsia-700',
-      status: pm10.statusText,
-      danger: pm10.value > 200,
+      status: pm10?.statusText ?? 'Elevated',
+      danger: pm10Val > 200,
     },
     {
       id: 'co',
