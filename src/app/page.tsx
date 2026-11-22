@@ -6,6 +6,8 @@ import { LocationBar } from '@/components/LocationBar';
 import { PersonaSwitcher } from '@/components/PersonaSwitcher';
 import { AqiHeroCard } from '@/components/AqiHeroCard';
 import { QuickDecisionGrid } from '@/components/QuickDecisionGrid';
+import { InversionVisualizer } from '@/components/InversionVisualizer';
+import { ParticleScaleVisualizer } from '@/components/ParticleScaleVisualizer';
 import { TelemetryGrid } from '@/components/TelemetryGrid';
 import { TodayRoutine } from '@/components/TodayRoutine';
 import { IndoorHacks } from '@/components/IndoorHacks';
@@ -258,6 +260,10 @@ export default function HomePage() {
                   lang={lang}
                   onOpenCopilot={handleOpenCopilot}
                 />
+                {/* Visualizer 1: Temperature Inversion Trap Animation */}
+                <InversionVisualizer lang={lang} />
+                {/* Visualizer 2: Microscopic PM2.5 vs Human Hair Scale Graphic */}
+                <ParticleScaleVisualizer lang={lang} currentPm25={snapshot.pollutants.pm25.value} />
                 <TelemetryGrid snapshot={snapshot} />
                 {plan && (
                   <TodayRoutine
@@ -278,12 +284,13 @@ export default function HomePage() {
                   lang={lang}
                   onOpenCopilot={handleOpenCopilot}
                 />
+                <InversionVisualizer lang={lang} />
                 <AqiHeroCard snapshot={snapshot} profile={currentProfile} lang={lang} />
               </div>
             )}
 
             {activeTab === 'indoor' && (
-              <IndoorHacks snapshot={snapshot} profile={currentProfile} />
+              <IndoorHacks snapshot={snapshot} profile={currentProfile} lang={lang} />
             )}
 
             {activeTab === 'impact' && plan && (
