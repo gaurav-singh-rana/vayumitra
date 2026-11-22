@@ -190,158 +190,105 @@ export const AqiInHeroSection: React.FC<AqiInHeroSectionProps> = ({
         </div>
       </div>
 
-      {/* Main Hero Card Container (Banner + Mini Map Card) */}
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-3">
-        {/* Left 3 Cols: Atmospheric Gradient Banner */}
-        <div
-          className={`lg:col-span-3 rounded-2xl p-5 sm:p-6 bg-gradient-to-r ${theme.gradient} border ${theme.cardBorder} shadow-sm relative overflow-hidden flex flex-col justify-between min-h-[220px]`}
-        >
-          {/* Subtle Skyline / Monuments Silhouettes Background */}
-          <div className="absolute bottom-0 right-0 left-0 h-16 opacity-15 pointer-events-none bg-repeat-x bg-bottom" style={{
-            backgroundImage: "url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"60\" fill=\"black\"><path d=\"M10 60 L10 40 L25 40 L25 30 L35 20 L45 30 L45 40 L60 40 L60 60 Z M80 60 L80 25 L100 25 L100 60 Z M120 60 L120 35 L140 15 L160 35 L160 60 Z\"/></svg>')",
-          }} />
+      {/* Main Hero Card Container (Full-Width Atmospheric Gradient Banner) */}
+      <div
+        className={`w-full rounded-2xl p-5 sm:p-7 bg-gradient-to-r ${theme.gradient} border ${theme.cardBorder} shadow-sm relative overflow-hidden flex flex-col justify-between min-h-[220px]`}
+      >
+        {/* Subtle Skyline / Monuments Silhouettes Background */}
+        <div className="absolute bottom-0 right-0 left-0 h-16 opacity-15 pointer-events-none bg-repeat-x bg-bottom" style={{
+          backgroundImage: "url('data:image/svg+xml;utf8,<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"60\" fill=\"black\"><path d=\"M10 60 L10 40 L25 40 L25 30 L35 20 L45 30 L45 40 L60 40 L60 60 Z M80 60 L80 25 L100 25 L100 60 Z M120 60 L120 35 L140 15 L160 35 L160 60 Z\"/></svg>')",
+        }} />
 
-          {/* Top content row */}
-          <div className="flex items-start justify-between flex-wrap gap-4 z-10">
-            {/* Live AQI Number & Badge */}
-            <div className="space-y-1">
-              <div className="flex items-center gap-1.5 text-xs text-slate-700 font-semibold">
-                <span className="w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
-                <span>Live AQI</span>
-              </div>
-              <div className="flex items-baseline gap-3">
-                <span className="font-heading text-5xl sm:text-6xl font-extrabold text-slate-900 tracking-tight">
-                  {displayAqi}
-                </span>
-                <span className="text-xs text-slate-600 font-bold uppercase tracking-wider">
-                  AQI ({standard === 'us' ? 'US' : 'IN'})
-                </span>
-              </div>
-
-              {/* Severity Pill */}
-              <div className="flex items-center gap-2 pt-1">
-                <span className="text-xs text-slate-700 font-medium">Air Quality is</span>
-                <span className={`px-3 py-1 rounded-md text-xs font-heading font-extrabold shadow-xs ${theme.badgeBg}`}>
-                  {theme.statusText}
-                </span>
-              </div>
+        {/* Top content row */}
+        <div className="flex items-start justify-between flex-wrap gap-4 z-10">
+          {/* Live AQI Number & Badge */}
+          <div className="space-y-1">
+            <div className="flex items-center gap-1.5 text-xs text-slate-700 font-semibold">
+              <span className="w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
+              <span>Live AQI</span>
+            </div>
+            <div className="flex items-baseline gap-3">
+              <span className="font-heading text-5xl sm:text-6xl font-extrabold text-slate-900 tracking-tight">
+                {displayAqi}
+              </span>
+              <span className="text-xs text-slate-600 font-bold uppercase tracking-wider">
+                AQI ({standard === 'us' ? 'US' : 'IN'})
+              </span>
             </div>
 
-            {/* Weather Glassmorphic Floating Widget */}
-            <div className="bg-white/80 backdrop-blur-md rounded-2xl p-3.5 border border-white/60 shadow-sm min-w-[210px] space-y-2">
-              <div className="flex items-center justify-between pb-1 border-b border-slate-100">
-                <div className="flex items-center gap-2">
-                  <span className="text-2xl">
-                    {weatherCond.includes('Sunny') ? '☀️' : weatherCond.includes('Cloud') ? '⛅' : '🌫️'}
-                  </span>
-                  <div>
-                    <span className="font-heading text-xl font-bold text-slate-800">{temp} °C</span>
-                    <span className="text-xs text-slate-500 ml-1.5 font-medium">{weatherCond}</span>
-                  </div>
-                </div>
-                <span className="material-symbols-outlined text-slate-400 text-[18px]">north_east</span>
-              </div>
-
-              {/* Micro Weather Details Grid */}
-              <div className="grid grid-cols-3 gap-2 text-center text-[10px] text-slate-600">
-                <div>
-                  <span className="block text-slate-400 uppercase">Humidity</span>
-                  <span className="font-bold text-slate-800">{humidity}%</span>
-                </div>
-                <div>
-                  <span className="block text-slate-400 uppercase">Wind</span>
-                  <span className="font-bold text-slate-800">{wind} km/h</span>
-                </div>
-                <div>
-                  <span className="block text-slate-400 uppercase">UV Index</span>
-                  <span className="font-bold text-slate-800">4</span>
-                </div>
-              </div>
+            {/* Severity Pill */}
+            <div className="flex items-center gap-2 pt-1">
+              <span className="text-xs text-slate-700 font-medium">Air Quality is</span>
+              <span className={`px-3 py-1 rounded-md text-xs font-heading font-extrabold shadow-xs ${theme.badgeBg}`}>
+                {theme.statusText}
+              </span>
             </div>
           </div>
 
-          {/* Bottom PM levels & AQI Scale Bar */}
-          <div className="pt-4 z-10 space-y-2">
-            <div className="flex items-center gap-4 text-xs font-semibold text-slate-800">
-              <span>
-                PM2.5: <strong className="font-bold text-slate-900">{pm25Val} µg/m³</strong>
-              </span>
-              <span className="text-slate-400">•</span>
-              <span>
-                PM10: <strong className="font-bold text-slate-900">{pm10Val} µg/m³</strong>
-              </span>
+          {/* Weather Glassmorphic Floating Widget */}
+          <div className="bg-white/80 backdrop-blur-md rounded-2xl p-3.5 border border-white/60 shadow-sm min-w-[210px] space-y-2">
+            <div className="flex items-center justify-between pb-1 border-b border-slate-100">
+              <div className="flex items-center gap-2">
+                <span className="text-2xl">
+                  {weatherCond.includes('Sunny') ? '☀️' : weatherCond.includes('Cloud') ? '⛅' : '🌫️'}
+                </span>
+                <div>
+                  <span className="font-heading text-xl font-bold text-slate-800">{temp} °C</span>
+                  <span className="text-xs text-slate-500 ml-1.5 font-medium">{weatherCond}</span>
+                </div>
+              </div>
+              <span className="material-symbols-outlined text-slate-400 text-[18px]">north_east</span>
             </div>
 
-            {/* Horizontal Color Scale Bar */}
-            <div className="relative pt-2">
-              <div className="h-2 w-full rounded-full bg-gradient-to-r from-emerald-500 via-amber-400 via-orange-500 via-purple-600 to-red-700 shadow-inner" />
-              {/* Animated Needle Indicator */}
-              <div
-                className="absolute top-1 transform -translate-x-1/2 flex flex-col items-center transition-all duration-700"
-                style={{ left: `${theme.pointerPercent}%` }}
-              >
-                <div className="w-3.5 h-3.5 bg-slate-900 rounded-full border-2 border-white shadow-md animate-bounce" />
+            {/* Micro Weather Details Grid */}
+            <div className="grid grid-cols-3 gap-2 text-center text-[10px] text-slate-600">
+              <div>
+                <span className="block text-slate-400 uppercase">Humidity</span>
+                <span className="font-bold text-slate-800">{humidity}%</span>
               </div>
-
-              <div className="flex justify-between text-[10px] text-slate-600 font-medium pt-1.5">
-                <span>Good (0)</span>
-                <span>Moderate (50)</span>
-                <span>Poor (100)</span>
-                <span>Unhealthy (200)</span>
-                <span>Severe (300)</span>
-                <span>Hazardous (400+)</span>
+              <div>
+                <span className="block text-slate-400 uppercase">Wind</span>
+                <span className="font-bold text-slate-800">{wind} km/h</span>
+              </div>
+              <div>
+                <span className="block text-slate-400 uppercase">UV Index</span>
+                <span className="font-bold text-slate-800">4</span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Right 1 Col: Mini AQI Map / Hotspot Card */}
-        <div className="lg:col-span-1 bg-white rounded-2xl p-4 border border-slate-200 shadow-sm flex flex-col justify-between relative overflow-hidden group">
-          {/* Faux Satellite Map Preview with Animated Hotspots */}
-          <div className="w-full h-36 rounded-xl bg-gradient-to-br from-rose-100 via-red-50 to-pink-100 border border-red-200 relative overflow-hidden flex items-center justify-center p-2">
-            {/* Map Grid Pattern */}
-            <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#ef4444_1px,transparent_1px)] [background-size:12px_12px]" />
-
-            {/* Pulsing Sensor Hotspots */}
-            <div className="absolute top-4 left-6 flex items-center justify-center">
-              <span className="w-6 h-6 rounded-full bg-red-500/20 animate-ping absolute" />
-              <span className="px-1.5 py-0.5 rounded-full bg-red-600 text-white font-mono text-[9px] font-bold shadow-xs">
-                {aqi}
-              </span>
-            </div>
-
-            <div className="absolute bottom-5 right-8 flex items-center justify-center">
-              <span className="px-1.5 py-0.5 rounded-full bg-purple-600 text-white font-mono text-[9px] font-bold shadow-xs">
-                {Math.round(aqi * 0.9)}
-              </span>
-            </div>
-
-            <div className="absolute top-8 right-6 flex items-center justify-center">
-              <span className="px-1.5 py-0.5 rounded-full bg-amber-500 text-white font-mono text-[9px] font-bold shadow-xs">
-                {Math.round(aqi * 0.75)}
-              </span>
-            </div>
-
-            {/* Map Top Badge */}
-            <div className="absolute top-2 left-2 flex items-center gap-1 px-2 py-0.5 rounded-md bg-white/90 shadow-xs text-[10px] font-bold text-slate-800">
-              <span>AQI Map</span>
-              <span className="material-symbols-outlined text-[12px]">crop_free</span>
-            </div>
-
-            {/* Bottom Station Tag */}
-            <div className="absolute bottom-2 left-2 flex items-center gap-1 text-[10px] font-bold text-slate-700 bg-white/90 px-2 py-0.5 rounded-md shadow-xs">
-              <span className="material-symbols-outlined text-[12px] text-red-500">location_on</span>
-              <span className="truncate max-w-[120px]">{snapshot.locationName.split('—')[0].trim()}</span>
-            </div>
+        {/* Bottom PM levels & AQI Scale Bar */}
+        <div className="pt-4 z-10 space-y-2">
+          <div className="flex items-center gap-4 text-xs font-semibold text-slate-800">
+            <span>
+              PM2.5: <strong className="font-bold text-slate-900">{pm25Val} µg/m³</strong>
+            </span>
+            <span className="text-slate-400">•</span>
+            <span>
+              PM10: <strong className="font-bold text-slate-900">{pm10Val} µg/m³</strong>
+            </span>
           </div>
 
-          <div className="pt-2 text-center">
-            <span className="font-heading text-xs font-bold text-slate-800 block">
-              {snapshot.stationCode} Network
-            </span>
-            <span className="text-[11px] text-slate-500 font-medium">
-              CPCB Continuous Telemetry Hub
-            </span>
+          {/* Horizontal Color Scale Bar */}
+          <div className="relative pt-2">
+            <div className="h-2 w-full rounded-full bg-gradient-to-r from-emerald-500 via-amber-400 via-orange-500 via-purple-600 to-red-700 shadow-inner" />
+            {/* Animated Needle Indicator */}
+            <div
+              className="absolute top-1 transform -translate-x-1/2 flex flex-col items-center transition-all duration-700"
+              style={{ left: `${theme.pointerPercent}%` }}
+            >
+              <div className="w-3.5 h-3.5 bg-slate-900 rounded-full border-2 border-white shadow-md animate-bounce" />
+            </div>
+
+            <div className="flex justify-between text-[10px] text-slate-600 font-medium pt-1.5">
+              <span>Good (0)</span>
+              <span>Moderate (50)</span>
+              <span>Poor (100)</span>
+              <span>Unhealthy (200)</span>
+              <span>Severe (300)</span>
+              <span>Hazardous (400+)</span>
+            </div>
           </div>
         </div>
       </div>
