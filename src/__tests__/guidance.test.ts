@@ -58,15 +58,58 @@ describe('Guidance Engine Generation', () => {
     expect(afternoon).toBeDefined();
     expect(afternoon?.statusTag).toBe('Safest Window');
 
-    // Confirm that the calculated PM2.5 spared references the live telemetry value
-    expect(plan.verdict.sparedPm25).toContain('µg/day');
+    // Verify Morning specifically locks down playground for Aarav
+    const morning = plan.routineItems.find((r) => r.period === 'Morning');
+    expect(morning?.title).toContain('Aarav');
   });
 
-  it('customizes guidance appropriately for senior citizens with respiratory sensitivities', async () => {
+  it('generates tailored bronchospasm guidance for Seniors & Asthma persona', async () => {
     const plan = await generateGuidancePlan(HOUSEHOLD_PERSONAS.seniors_respiratory, mockSnapshot);
-    const morning = plan.routineItems.find((r) => r.period === 'Morning');
 
+    const morning = plan.routineItems.find((r) => r.period === 'Morning');
     expect(morning?.title).toContain('Bronchospasm');
-    expect(morning?.badges.some((b) => b.text.includes('N95'))).toBe(true);
+    expect(morning?.description).toContain('bronchial');
+  });
+
+  it('generates commute bottleneck and Metro switch guidance for Daily Commuter persona', async () => {
+    const plan = await generateGuidancePlan(HOUSEHOLD_PERSONAS.daily_commuter, mockSnapshot);
+
+    const morning = plan.routineItems.find((r) => r.period === 'Morning');
+    expect(morning?.title).toContain('Commute Bottleneck');
+    expect(morning?.description).toContain('Metro');
+  });
+
+  it('generates indoor sanctuary and wet-mopping guidance for WFH & Homemaker persona', async () => {
+    const plan = await generateGuidancePlan(HOUSEHOLD_PERSONAS.wfh_homemaker, mockSnapshot);
+
+    const morning = plan.routineItems.find((r) => r.period === 'Morning');
+    expect(morning?.title).toContain('Sanctuary');
+    expect(morning?.description).toContain('wet mop');
+  });
+
+  it('handles snapshot with missing pollutants gracefully without throwing', async () => {
+    const sparseSnapshot: AirQualitySnapshot = {
+      locationId: 'sparse-city',
+      locationName: 'Sparse Station',
+      stationCode: 'SP-01',
+      timestamp: '2026-11-22T10:30:00+05:30',
+      sourceName: 'CPCB',
+      aqi: 220,
+      severity: 'Poor',
+      hindiSeverity: 'खराब (Poor)',
+      dominantPollutant: 'PM2.5',
+      summary: 'Moderate discomfort',
+      inversionRisk: 'Moderate',
+      inversionWindowText: 'Normal dispersion',
+      pollutants: {} as any,
+      windSpeedKmH: 2.1,
+      windDirection: 'N',
+      dispersionRateText: 'Normal',
+    };
+
+    const plan = await generateGuidancePlan(HOUSEHOLD_PERSONAS.parents_young_children, sparseSnapshot);
+    expect(plan).toBeDefined();
+    expect(plan.verdict.score).toBeGreaterThan(0);
+    expect(plan.routineItems.length).toBe(3);
   });
 });

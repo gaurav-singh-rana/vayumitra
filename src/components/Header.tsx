@@ -32,10 +32,11 @@ export const Header: React.FC<HeaderProps> = ({
         return;
       }
 
+      const pm25Val = snapshot?.pollutants?.pm25?.value ?? Math.round(snapshot.aqi * 0.7);
       const text =
         lang === 'hi'
-          ? `नमस्ते! वायुमित्र लाइव रिपोर्ट। ${snapshot.locationName} में वर्तमान AQI ${snapshot.aqi} है। यह श्रेणी ${snapshot.hindiSeverity} है। बारीक धूल कण PM2.5 का स्तर ${snapshot.pollutants.pm25.value} माइक्रोग्राम है। आज दोपहर 12 से 4 बजे का समय बाहर निकलने के लिए सबसे सुरक्षित है। सुबह और शाम खिड़कियां बंद रखें। सुरक्षित रहें!`
-          : `Namaste! VayuMitra live report for ${snapshot.locationName}. Current AQI is ${snapshot.aqi}, categorized as ${snapshot.severity}. Fine particulate PM2.5 is ${snapshot.pollutants.pm25.value} micrograms per cubic meter. Recommended safe outdoor window is afternoon 12 to 4 PM. Stay shielded!`;
+          ? `नमस्ते! वायुमित्र लाइव रिपोर्ट। ${snapshot.locationName} में वर्तमान AQI ${snapshot.aqi} है। यह श्रेणी ${snapshot.hindiSeverity} है। बारीक धूल कण PM2.5 का स्तर ${pm25Val} माइक्रोग्राम है। आज दोपहर 12 से 4 बजे का समय बाहर निकलने के लिए सबसे सुरक्षित है। सुबह और शाम खिड़कियां बंद रखें। सुरक्षित रहें!`
+          : `Namaste! VayuMitra live report for ${snapshot.locationName}. Current AQI is ${snapshot.aqi}, categorized as ${snapshot.severity}. Fine particulate PM2.5 is ${pm25Val} micrograms per cubic meter. Recommended safe outdoor window is afternoon 12 to 4 PM. Stay shielded!`;
 
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = lang === 'hi' ? 'hi-IN' : 'en-IN';

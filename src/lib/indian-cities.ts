@@ -527,6 +527,17 @@ export function findLocationById(id: string): IndianLocation {
   return match || INDIAN_LOCATIONS[0];
 }
 
+export function getPresetByCityName(cityName: string): IndianLocation | undefined {
+  const clean = cityName.trim().toLowerCase();
+  if (!clean) return undefined;
+  return INDIAN_LOCATIONS.find(
+    (loc) =>
+      loc.name.toLowerCase().includes(clean) ||
+      loc.state.toLowerCase().includes(clean) ||
+      (clean === 'gurgaon' && loc.name.toLowerCase().includes('gurugram'))
+  );
+}
+
 export function searchLocations(query: string): IndianLocation[] {
   const clean = query.trim().toLowerCase();
   if (!clean) return INDIAN_LOCATIONS.slice(0, 8);
