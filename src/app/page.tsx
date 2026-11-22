@@ -301,6 +301,20 @@ export default function HomePage() {
     }
   };
 
+  const handleNavigateSection = (tab: NavTab, anchorId?: string) => {
+    setActiveTab(tab);
+    if (anchorId) {
+      setTimeout(() => {
+        const el = document.getElementById(anchorId);
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth' });
+        } else {
+          window.scrollTo({ top: 300, behavior: 'smooth' });
+        }
+      }, 100);
+    }
+  };
+
   // Handle persona switch
   const handleSelectPersona = (pId: PersonaType) => {
     const prof = HOUSEHOLD_PERSONAS[pId];
@@ -531,8 +545,13 @@ export default function HomePage() {
         )}
       </main>
 
-      {/* Enterprise Global Footer */}
-      <Footer lang={lang} onSelectCity={handleSelectCityById} />
+      {/* Enterprise Global Footer with Synchronized Brand Logo & Working Navigators */}
+      <Footer
+        lang={lang}
+        onSelectCity={handleSelectCityById}
+        onNavigateSection={handleNavigateSection}
+        onOpenCopilot={handleOpenCopilot}
+      />
 
       {/* Floating Action Button for Ask Vayu Copilot */}
       <button
