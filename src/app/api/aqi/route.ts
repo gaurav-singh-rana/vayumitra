@@ -3,11 +3,32 @@ import { appCache } from '@/lib/cache';
 import { buildPollutantDetails, getAqiCategory } from '@/lib/cpcb-aqi';
 import { findLocationById, INDIAN_LOCATIONS } from '@/lib/indian-cities';
 import { sanitizeCityQuery } from '@/lib/sanitization';
+import { aqiRateLimiter, getClientIp } from '@/lib/rate-limiter';
 import { AirQualitySnapshot, PollutantDetail } from '@/types';
 
 export const dynamic = 'force-dynamic';
 
 export async function GET(request: NextRequest) {
+  // IP Rate Limiting Check
+  const clientIp = getClientIp(request);
+  const rateLimit = aqiRateLimiter.check(clientIp);
+
+  if (!rateLimit.isAllowed) {
+    return NextResponse.json(
+      { error: 'Too many telemetry requests. Please wait a moment.' },
+      {
+        status: 429,
+        headers: {
+          'X-RateLimit-Limit': String(rateLimit.limit),
+          'X-RateLimit-Remaining': '0',
+          'X-RateLimit-Reset': String(rateLimit.resetTimeSeconds),
+          'Retry-After': String(rateLimit.resetTimeSeconds),
+          'X-Content-Type-Options': 'nosniff',
+        },
+      }
+    );
+  }
+
   try {
     const { searchParams } = new URL(request.url);
     const locationIdParam = searchParams.get('locationId');

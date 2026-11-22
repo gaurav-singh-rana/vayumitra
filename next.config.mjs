@@ -33,7 +33,7 @@ const nextConfig = {
         },
         {
           key: 'Content-Security-Policy',
-          value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https: blob:; connect-src 'self' https://api.open-meteo.com https://air-quality-api.open-meteo.com https://generativelanguage.googleapis.com; frame-ancestors 'none';",
+          value: "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: https: blob:; connect-src 'self' https://api.open-meteo.com https://air-quality-api.open-meteo.com https://generativelanguage.googleapis.com; frame-ancestors 'none';",
         },
       ],
     },

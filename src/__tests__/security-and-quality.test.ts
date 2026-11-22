@@ -3,6 +3,7 @@ import { sanitizeUserInput, sanitizeCityQuery } from '@/lib/sanitization';
 import { HOUSEHOLD_PERSONAS } from '@/lib/personas';
 import { INDIAN_LOCATIONS, findLocationById } from '@/lib/indian-cities';
 import { buildPollutantDetails, getAqiCategory } from '@/lib/cpcb-aqi';
+import { chatRateLimiter } from '@/lib/rate-limiter';
 
 describe('Security & Input Sanitization Suite', () => {
   it('rejects malicious prompt injection vectors targeting system prompts and API keys', () => {
@@ -20,6 +21,19 @@ describe('Security & Input Sanitization Suite', () => {
       const result = sanitizeUserInput(payload);
       expect(result.isValid).toBe(false);
       expect(result.errorMessage).toBeDefined();
+    });
+  });
+
+  it('blocks null-byte poisoning and prototype pollution injection attempts', () => {
+    const maliciousStrings = [
+      'safe prefix\0evil payload',
+      'something__proto__payload',
+      'exploit constructor["prototype"] override',
+    ];
+
+    maliciousStrings.forEach((str) => {
+      const result = sanitizeUserInput(str);
+      expect(result.isValid).toBe(false);
     });
   });
 
@@ -42,6 +56,20 @@ describe('Security & Input Sanitization Suite', () => {
   it('cleanses city search queries against non-alphanumeric special characters', () => {
     expect(sanitizeCityQuery('Delhi / NCR; DROP TABLE--')).toBe('Delhi  NCR DROP TABLE--'.replace(/[^a-zA-Z0-9\s,-]/g, ''));
     expect(sanitizeCityQuery('Gurugram, Haryana')).toBe('Gurugram, Haryana');
+  });
+
+  it('correctly throttles excessive API requests using in-memory sliding window rate limiter', () => {
+    const testIp = '192.168.1.99';
+    // Exhaust limit (30 requests for chatRateLimiter)
+    for (let i = 0; i < 30; i++) {
+      const res = chatRateLimiter.check(testIp);
+      expect(res.isAllowed).toBe(true);
+    }
+    // 31st request should be blocked
+    const blockedRes = chatRateLimiter.check(testIp);
+    expect(blockedRes.isAllowed).toBe(false);
+    expect(blockedRes.remaining).toBe(0);
+    expect(blockedRes.resetTimeSeconds).toBeGreaterThan(0);
   });
 });
 

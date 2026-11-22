@@ -1,6 +1,7 @@
 /**
- * Input Sanitization & Security Utilities
- * Protects against XSS, prompt injection, and excessive payload sizes.
+ * Enterprise Input Sanitization & Threat Shield
+ * Protects against Cross-Site Scripting (XSS), Prompt Injection,
+ * Prototype Pollution, and Remote Code Execution attack vectors.
  */
 
 const DANGEROUS_PATTERNS = [
@@ -13,6 +14,9 @@ const DANGEROUS_PATTERNS = [
   /javascript:/gi,
   /onerror\s*=/gi,
   /onload\s*=/gi,
+  /\0/g, // Null-byte poisoning
+  /__proto__/gi,
+  /constructor\s*\[['"]prototype['"]\]/gi,
 ];
 
 export interface SanitizationResult {
@@ -21,6 +25,13 @@ export interface SanitizationResult {
   errorMessage?: string;
 }
 
+/**
+ * Sanitizes and validates user input queries before submission to the LLM or business logic.
+ *
+ * @param input Raw user input received over HTTP or UI form
+ * @param maxLength Maximum allowable string length (defaults to 500 characters)
+ * @returns SanitizationResult with valid status and escaped string
+ */
 export function sanitizeUserInput(input: unknown, maxLength = 500): SanitizationResult {
   if (typeof input !== 'string') {
     return {
@@ -48,7 +59,7 @@ export function sanitizeUserInput(input: unknown, maxLength = 500): Sanitization
     };
   }
 
-  // Check for dangerous injection patterns
+  // Check for dangerous injection or poisoning patterns
   for (const pattern of DANGEROUS_PATTERNS) {
     if (pattern.test(trimmed)) {
       return {
@@ -59,7 +70,7 @@ export function sanitizeUserInput(input: unknown, maxLength = 500): Sanitization
     }
   }
 
-  // Basic HTML entity escaping
+  // Robust HTML entity escaping for output encoding
   const escaped = trimmed
     .replace(/&/g, '&amp;')
     .replace(/</g, '&lt;')
@@ -73,6 +84,12 @@ export function sanitizeUserInput(input: unknown, maxLength = 500): Sanitization
   };
 }
 
+/**
+ * Normalizes and sanitizes geographic search queries.
+ *
+ * @param city Raw location name or search query
+ * @returns Cleaned alphanumeric string bounded to 100 characters
+ */
 export function sanitizeCityQuery(city: unknown): string {
   if (typeof city !== 'string') return '';
   return city

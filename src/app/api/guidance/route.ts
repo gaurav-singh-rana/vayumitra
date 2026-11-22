@@ -2,20 +2,47 @@ import { NextRequest, NextResponse } from 'next/server';
 import { appCache } from '@/lib/cache';
 import { generateGuidancePlan } from '@/lib/guidance-engine';
 import { HOUSEHOLD_PERSONAS } from '@/lib/personas';
+import { getClientIp, guidanceRateLimiter } from '@/lib/rate-limiter';
 import { AirQualitySnapshot, PersonaType, RecommendationPlan } from '@/types';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: NextRequest) {
+  // 1. IP Rate Limiting Check
+  const clientIp = getClientIp(request);
+  const rateLimit = guidanceRateLimiter.check(clientIp);
+
+  if (!rateLimit.isAllowed) {
+    return NextResponse.json(
+      { error: 'Too many requests. Please slow down.' },
+      {
+        status: 429,
+        headers: {
+          'X-RateLimit-Limit': String(rateLimit.limit),
+          'X-RateLimit-Remaining': '0',
+          'X-RateLimit-Reset': String(rateLimit.resetTimeSeconds),
+          'Retry-After': String(rateLimit.resetTimeSeconds),
+          'X-Content-Type-Options': 'nosniff',
+        },
+      }
+    );
+  }
+
   try {
     const body = await request.json();
-    const personaId = (body.personaId as PersonaType) || 'parents_young_children';
-    const snapshot = body.snapshot as AirQualitySnapshot | undefined;
+    const personaId = (body?.personaId as PersonaType) || 'parents_young_children';
+    const snapshot = body?.snapshot as AirQualitySnapshot | undefined;
 
-    if (!snapshot || !snapshot.aqi) {
+    if (!snapshot || typeof snapshot.aqi !== 'number') {
       return NextResponse.json(
         { error: 'Valid air quality snapshot is required to generate guidance.' },
-        { status: 400 }
+        {
+          status: 400,
+          headers: {
+            'X-Content-Type-Options': 'nosniff',
+            'X-RateLimit-Remaining': String(rateLimit.remaining),
+          },
+        }
       );
     }
 
@@ -24,11 +51,20 @@ export async function POST(request: NextRequest) {
 
     const cached = appCache.get<RecommendationPlan>(cacheKey);
     if (cached) {
-      return NextResponse.json({
-        ...cached.data,
-        fromCache: true,
-        ageSeconds: Math.round(cached.ageMs / 1000),
-      });
+      return NextResponse.json(
+        {
+          ...cached.data,
+          fromCache: true,
+          ageSeconds: Math.round(cached.ageMs / 1000),
+        },
+        {
+          headers: {
+            'X-Content-Type-Options': 'nosniff',
+            'Cache-Control': 'public, s-maxage=900, stale-while-revalidate=300',
+            'X-RateLimit-Remaining': String(rateLimit.remaining),
+          },
+        }
+      );
     }
 
     const plan = await generateGuidancePlan(profile, snapshot);
@@ -40,6 +76,7 @@ export async function POST(request: NextRequest) {
       headers: {
         'X-Content-Type-Options': 'nosniff',
         'Cache-Control': 'public, s-maxage=900, stale-while-revalidate=300',
+        'X-RateLimit-Remaining': String(rateLimit.remaining),
       },
     });
   } catch {
@@ -68,11 +105,22 @@ export async function POST(request: NextRequest) {
         dispersionRateText: 'Stagnant',
       };
       const plan = await generateGuidancePlan(profile, fallbackSnapshot);
-      return NextResponse.json(plan);
+      return NextResponse.json(plan, {
+        headers: {
+          'X-Content-Type-Options': 'nosniff',
+          'Cache-Control': 'no-store, max-age=0',
+        },
+      });
     } catch {
       return NextResponse.json(
         { error: 'Unable to generate recommendations right now' },
-        { status: 500 }
+        {
+          status: 500,
+          headers: {
+            'X-Content-Type-Options': 'nosniff',
+            'Cache-Control': 'no-store, max-age=0',
+          },
+        }
       );
     }
   }
