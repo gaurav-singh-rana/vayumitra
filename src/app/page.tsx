@@ -5,6 +5,7 @@ import { Header } from '@/components/Header';
 import { LocationBar } from '@/components/LocationBar';
 import { PersonaSwitcher } from '@/components/PersonaSwitcher';
 import { AqiHeroCard } from '@/components/AqiHeroCard';
+import { QuickDecisionGrid } from '@/components/QuickDecisionGrid';
 import { TelemetryGrid } from '@/components/TelemetryGrid';
 import { TodayRoutine } from '@/components/TodayRoutine';
 import { IndoorHacks } from '@/components/IndoorHacks';
@@ -13,9 +14,11 @@ import { AskVayuCopilot } from '@/components/AskVayuCopilot';
 import { BottomNav, NavTab } from '@/components/BottomNav';
 import { INDIAN_LOCATIONS } from '@/lib/indian-cities';
 import { HOUSEHOLD_PERSONAS } from '@/lib/personas';
+import { Language, TRANSLATIONS } from '@/lib/translations';
 import { AirQualitySnapshot, HouseholdProfile, IndianLocation, PersonaType, RecommendationPlan } from '@/types';
 
 export default function HomePage() {
+  const [lang, setLang] = useState<Language>('hi');
   const [currentLocation, setCurrentLocation] = useState<IndianLocation>(INDIAN_LOCATIONS[0]);
   const [currentProfile, setCurrentProfile] = useState<HouseholdProfile>(HOUSEHOLD_PERSONAS.parents_young_children);
   const [activeTab, setActiveTab] = useState<NavTab>('today');
@@ -32,13 +35,15 @@ export default function HomePage() {
   const [isCopilotOpen, setIsCopilotOpen] = useState<boolean>(false);
   const [copilotInitialQuestion, setCopilotInitialQuestion] = useState<string | undefined>(undefined);
 
+  const t = TRANSLATIONS[lang];
+
   // Fetch AQI for current location
   const fetchAQI = useCallback(async (loc: IndianLocation) => {
     setIsLoadingAQI(true);
     setAqiError(null);
 
     try {
-      const res = await fetch(`/api/aqi?locationId=${loc.id}&lat=${loc.latitude}&lon=${loc.longitude}`);
+      const res = await fetch(`/api/aqi?locationId=${loc.id}&lat=${loc.latitude}&lon=${loc.longitude}&q=${encodeURIComponent(loc.name)}`);
       const data = await res.json();
 
       if (!res.ok) {
@@ -123,7 +128,7 @@ export default function HomePage() {
   // Browser Geolocation Auto-Detection with graceful fallback
   const handleAutoDetect = () => {
     if (!('geolocation' in navigator)) {
-      setLocationError('Geolocation is not supported by your browser.');
+      setLocationError(lang === 'hi' ? 'आपके ब्राउज़र में GPS सपोर्ट नहीं है।' : 'Geolocation is not supported by your browser.');
       return;
     }
 
@@ -136,10 +141,10 @@ export default function HomePage() {
         const { latitude, longitude } = pos.coords;
         const customLoc: IndianLocation = {
           id: `gps-${latitude.toFixed(2)}-${longitude.toFixed(2)}`,
-          name: `My GPS Coordinates (${latitude.toFixed(2)}, ${longitude.toFixed(2)})`,
-          state: 'Auto-Detected',
-          stationName: 'Nearest Local Sensor Node',
-          stationCode: 'GPS-LOC-01',
+          name: lang === 'hi' ? `मेरी लोकेशन (${latitude.toFixed(2)}, ${longitude.toFixed(2)})` : `My GPS Location (${latitude.toFixed(2)}, ${longitude.toFixed(2)})`,
+          state: 'GPS',
+          stationName: 'Nearest Local Sensor Hub',
+          stationCode: 'GPS-01',
           latitude,
           longitude,
         };
@@ -148,9 +153,17 @@ export default function HomePage() {
       (error) => {
         setIsLocating(false);
         if (error.code === error.PERMISSION_DENIED) {
-          setLocationError('Location access was denied. Choose a city manually from the presets.');
+          setLocationError(
+            lang === 'hi'
+              ? 'लोकेशन की अनुमति नहीं मिली। कृपया नीचे से अपना शहर चुनें।'
+              : 'Location access was denied. Choose a city manually from the presets.'
+          );
         } else {
-          setLocationError('Unable to detect location. Please select your city manually.');
+          setLocationError(
+            lang === 'hi'
+              ? 'लोकेशन नहीं मिली। कृपया अपना शहर खुद चुनें।'
+              : 'Unable to detect location. Please select your city manually.'
+          );
         }
       },
       { timeout: 8000 }
@@ -167,6 +180,8 @@ export default function HomePage() {
       <Header
         snapshot={snapshot}
         profile={currentProfile}
+        lang={lang}
+        onToggleLang={() => setLang((prev) => (prev === 'hi' ? 'en' : 'hi'))}
         onOpenCopilot={() => handleOpenCopilot()}
       />
 
@@ -175,6 +190,7 @@ export default function HomePage() {
         <LocationBar
           currentLocation={currentLocation}
           snapshot={snapshot}
+          lang={lang}
           onSelectLocation={handleSelectLocation}
           onAutoDetectLocation={handleAutoDetect}
           isLocating={isLocating}
@@ -185,6 +201,7 @@ export default function HomePage() {
         <div className="mt-2.5 mb-4">
           <PersonaSwitcher
             currentProfile={currentProfile}
+            lang={lang}
             onSelectPersona={handleSelectPersona}
           />
         </div>
@@ -199,10 +216,12 @@ export default function HomePage() {
               <span className="material-symbols-outlined text-error text-[24px]">cloud_off</span>
               <div>
                 <p className="font-heading text-sm font-bold text-error">
-                  Live air quality data is currently unavailable
+                  {lang === 'hi' ? 'लाइव वायु डेटा अभी उपलब्ध नहीं है' : 'Live air quality data is currently unavailable'}
                 </p>
                 <p className="text-xs text-on-surface-variant">
-                  We never fabricate or guess AQI numbers. Please try again or switch station.
+                  {lang === 'hi'
+                    ? 'हम कभी भी मनगढ़ंत AQI नंबर नहीं दिखाते। कृपया दोबारा प्रयास करें।'
+                    : 'We never fabricate or guess AQI numbers. Please try again or switch station.'}
                 </p>
               </div>
             </div>
@@ -211,7 +230,7 @@ export default function HomePage() {
               className="px-4 py-2 rounded-lg bg-error text-white font-heading text-xs font-bold hover:bg-error/90 transition-colors"
               type="button"
             >
-              Retry Live Fetch
+              {lang === 'hi' ? 'दोबारा लोड करें' : 'Retry Live Fetch'}
             </button>
           </div>
         )}
@@ -219,10 +238,8 @@ export default function HomePage() {
         {/* Loading Skeletons */}
         {isLoadingAQI && !snapshot && (
           <div className="space-y-4 animate-pulse" aria-live="polite" aria-label="Loading live telemetry">
-            <div className="w-full h-48 bg-surface-container-high rounded-2xl"></div>
+            <div className="w-full h-44 bg-surface-container-high rounded-2xl"></div>
             <div className="grid grid-cols-2 gap-3">
-              <div className="h-28 bg-surface-container-high rounded-xl"></div>
-              <div className="h-28 bg-surface-container-high rounded-xl"></div>
               <div className="h-28 bg-surface-container-high rounded-xl"></div>
               <div className="h-28 bg-surface-container-high rounded-xl"></div>
             </div>
@@ -234,7 +251,13 @@ export default function HomePage() {
           <div className="space-y-4">
             {activeTab === 'today' && (
               <>
-                <AqiHeroCard snapshot={snapshot} profile={currentProfile} />
+                <AqiHeroCard snapshot={snapshot} profile={currentProfile} lang={lang} />
+                <QuickDecisionGrid
+                  snapshot={snapshot}
+                  profile={currentProfile}
+                  lang={lang}
+                  onOpenCopilot={handleOpenCopilot}
+                />
                 <TelemetryGrid snapshot={snapshot} />
                 {plan && (
                   <TodayRoutine
@@ -244,12 +267,19 @@ export default function HomePage() {
                     onSwitchTab={(t) => setActiveTab(t)}
                   />
                 )}
-                {isLoadingPlan && !plan && (
-                  <div className="p-6 bg-surface-container-lowest rounded-xl text-center text-xs text-on-surface-variant animate-pulse">
-                    Synthesizing personalized daily routine for {currentProfile.name}...
-                  </div>
-                )}
               </>
+            )}
+
+            {activeTab === 'decisions' && (
+              <div className="space-y-4">
+                <QuickDecisionGrid
+                  snapshot={snapshot}
+                  profile={currentProfile}
+                  lang={lang}
+                  onOpenCopilot={handleOpenCopilot}
+                />
+                <AqiHeroCard snapshot={snapshot} profile={currentProfile} lang={lang} />
+              </div>
             )}
 
             {activeTab === 'indoor' && (
@@ -267,17 +297,14 @@ export default function HomePage() {
             {/* Informational Non-Medical Disclaimer */}
             <div className="pt-4 text-center">
               <p className="text-[11px] text-on-surface-variant/70 leading-relaxed max-w-2xl mx-auto">
-                <strong>VayuMitra Informational Notice:</strong> Recommendations are derived from
-                live environmental air telemetry (CPCB / Open-Meteo) and public health guidance.
-                They represent modeled estimations and do not substitute for individual medical
-                diagnoses. In acute respiratory distress, consult emergency healthcare services immediately.
+                <strong>{lang === 'hi' ? 'वायुमित्र सूचना:' : 'VayuMitra Notice:'}</strong> {t.disclaimer}
               </p>
             </div>
           </div>
         )}
       </main>
 
-      {/* Floating Action Button for Ask Vayu Copilot (Mobile/Desktop) */}
+      {/* Floating Action Button for Ask Vayu Copilot */}
       <button
         onClick={() => handleOpenCopilot()}
         aria-label="Open Ask Vayu AI Copilot"
@@ -306,13 +333,17 @@ export default function HomePage() {
       )}
 
       {/* Sticky Bottom Navigation */}
-      <BottomNav activeTab={activeTab} onChangeTab={(tab) => {
-        if (tab === 'copilot') {
-          setIsCopilotOpen(true);
-        } else {
-          setActiveTab(tab);
-        }
-      }} />
+      <BottomNav
+        activeTab={activeTab}
+        lang={lang}
+        onChangeTab={(tab) => {
+          if (tab === 'copilot') {
+            setIsCopilotOpen(true);
+          } else {
+            setActiveTab(tab);
+          }
+        }}
+      />
     </>
   );
 }
