@@ -2,6 +2,11 @@ import { describe, it, expect } from 'vitest';
 import { INDIAN_LOCATIONS, getPresetByCityName, searchLocations } from '@/lib/indian-cities';
 
 describe('Indian Cities & Geocoding Dataset', () => {
+  it('has Gurugram as the default selection at index 0', () => {
+    expect(INDIAN_LOCATIONS[0].id).toBe('gurugram-cyberhub');
+    expect(INDIAN_LOCATIONS[0].name).toContain('Gurugram');
+  });
+
   it('contains comprehensive major Indian metro and tier-2 presets', () => {
     expect(INDIAN_LOCATIONS.length).toBeGreaterThanOrEqual(15);
     

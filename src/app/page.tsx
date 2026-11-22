@@ -13,6 +13,8 @@ import { TodayRoutine } from '@/components/TodayRoutine';
 import { IndoorHacks } from '@/components/IndoorHacks';
 import { DirectImpact } from '@/components/DirectImpact';
 import { RecommendationHub } from '@/components/RecommendationHub';
+import { HourlyForecastBar } from '@/components/HourlyForecastBar';
+import { MaskDefenseCard } from '@/components/MaskDefenseCard';
 import { AskVayuCopilot } from '@/components/AskVayuCopilot';
 import { BottomNav, NavTab } from '@/components/BottomNav';
 import { INDIAN_LOCATIONS } from '@/lib/indian-cities';
@@ -21,7 +23,7 @@ import { Language, TRANSLATIONS } from '@/lib/translations';
 import { AirQualitySnapshot, HouseholdProfile, IndianLocation, PersonaType, RecommendationPlan } from '@/types';
 
 export default function HomePage() {
-  const [lang, setLang] = useState<Language>('hi');
+  const [lang, setLang] = useState<Language>('en');
   const [currentLocation, setCurrentLocation] = useState<IndianLocation>(INDIAN_LOCATIONS[0]);
   const [currentProfile, setCurrentProfile] = useState<HouseholdProfile>(HOUSEHOLD_PERSONAS.parents_young_children);
   const [activeTab, setActiveTab] = useState<NavTab>('today');
@@ -430,7 +432,10 @@ export default function HomePage() {
                   onSelectPollutant={(p) => handleOpenCopilot(`Tell me about ${p} levels in ${snapshot.locationName} today.`)}
                 />
 
-                {/* 3. Core Personalized Recommendation Hub (Pillars 1, 2, 3 + Verdict + Persona Switcher) */}
+                {/* 3. 24-Hour Diurnal Breathing Forecast */}
+                <HourlyForecastBar snapshot={snapshot} lang={lang} />
+
+                {/* 4. Core Personalized Recommendation Hub (Pillars 1, 2, 3 + Verdict + Persona Switcher) */}
                 {plan && (
                   <RecommendationHub
                     snapshot={snapshot}
@@ -442,6 +447,9 @@ export default function HomePage() {
                     onSwitchGlobalTab={(t) => setActiveTab(t)}
                   />
                 )}
+
+                {/* 5. Mask Filtration & Penetration Defense Guide */}
+                <MaskDefenseCard lang={lang} />
               </>
             )}
 

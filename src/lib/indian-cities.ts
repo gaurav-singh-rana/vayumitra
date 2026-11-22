@@ -1,6 +1,18 @@
 import { IndianLocation } from '@/types';
 
 export const INDIAN_LOCATIONS: IndianLocation[] = [
+  // --- Gurugram (Default Selection) ---
+  {
+    id: 'gurugram-cyberhub',
+    name: 'Gurugram — Cyber City / DLF',
+    state: 'Haryana (NCR)',
+    stationName: 'Gwal Pahari / Cyber City HSPCB Station',
+    stationCode: 'HR-GUR-02',
+    latitude: 28.4900,
+    longitude: 77.0900,
+    isPreset: true,
+    presetPersona: 'parents_young_children',
+  },
   // --- Delhi-NCR ---
   {
     id: 'delhi-anand-vihar',

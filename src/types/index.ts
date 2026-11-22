@@ -80,6 +80,16 @@ export interface AirQualitySnapshot {
   uvIndex?: number;
   rankInIndia?: number;
   fromCache?: boolean;
+  hourlyForecast?: HourlyForecastItem[];
+}
+
+export interface HourlyForecastItem {
+  time: string;
+  hour: number;
+  aqi: number;
+  pm25: number;
+  severity: AQISeverity;
+  isSafeWindow?: boolean;
 }
 
 export interface RoutineItem {
