@@ -34,6 +34,7 @@ export default function HomePage() {
   const [isLoadingAQI, setIsLoadingAQI] = useState<boolean>(true);
   const [isLoadingPlan, setIsLoadingPlan] = useState<boolean>(true);
   const [isLocating, setIsLocating] = useState<boolean>(false);
+  const [isRefreshing, setIsRefreshing] = useState<boolean>(false);
   const [aqiError, setAqiError] = useState<string | null>(null);
   const [locationError, setLocationError] = useState<string | null>(null);
 
@@ -43,12 +44,13 @@ export default function HomePage() {
   const t = TRANSLATIONS[lang];
 
   // Fetch AQI for current location
-  const fetchAQI = useCallback(async (loc: IndianLocation) => {
+  const fetchAQI = useCallback(async (loc: IndianLocation, forceRefresh = false) => {
     setIsLoadingAQI(true);
     setAqiError(null);
 
     try {
-      const res = await fetch(`/api/aqi?locationId=${loc.id}&lat=${loc.latitude}&lon=${loc.longitude}&q=${encodeURIComponent(loc.name)}`);
+      const refreshQuery = forceRefresh ? '&refresh=true' : '';
+      const res = await fetch(`/api/aqi?locationId=${loc.id}&lat=${loc.latitude}&lon=${loc.longitude}&q=${encodeURIComponent(loc.name)}${refreshQuery}`);
       const data = await res.json();
 
       if (!res.ok) {
@@ -65,6 +67,18 @@ export default function HomePage() {
       setIsLoadingAQI(false);
     }
   }, []);
+
+  const handleRefreshLive = async () => {
+    setIsRefreshing(true);
+    try {
+      const snap = await fetchAQI(currentLocation, true);
+      if (snap) {
+        await fetchGuidance(currentProfile, snap);
+      }
+    } finally {
+      setIsRefreshing(false);
+    }
+  };
 
   // Fetch Personalized Guidance
   const fetchGuidance = useCallback(async (prof: HouseholdProfile, snap: AirQualitySnapshot) => {
@@ -423,6 +437,8 @@ export default function HomePage() {
                   lang={lang}
                   onAutoDetectLocation={handleAutoDetect}
                   isLocating={isLocating}
+                  onRefreshLive={handleRefreshLive}
+                  isRefreshing={isRefreshing}
                 />
 
                 {/* 2. Major Air Pollutants Grid (AQI.in reference design) */}

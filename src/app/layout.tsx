@@ -2,9 +2,14 @@ import type { Metadata, Viewport } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'VayuMitra (वायुमित्र) — Urban Air Quality Companion',
+  title: 'AQI VayuMitra (वायुमित्र) — Real-Time Indian Air Quality Index & Protection',
   description:
-    'Grounded, GenAI-powered urban air quality assistant for Indian households. Real-time CPCB telemetry, low-emission daily routines, indoor air hacks, and quantified impact.',
+    'Real-time Indian Air Quality Index (AQI), PM2.5, PM10 air pollution levels, and personalized household clean air protection plan.',
+  icons: {
+    icon: '/icon.svg',
+    shortcut: '/icon.svg',
+    apple: '/icon.svg',
+  },
   manifest: '/manifest.json',
 };
 

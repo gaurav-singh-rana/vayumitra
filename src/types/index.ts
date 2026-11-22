@@ -57,6 +57,7 @@ export interface AirQualitySnapshot {
   timestamp: string; // ISO 8601 string from data source
   sourceName: string; // e.g., "CPCB / Open-Meteo Air Telemetry"
   aqi: number;
+  usAqi?: number;
   severity: AQISeverity;
   hindiSeverity: string;
   dominantPollutant: 'PM2.5' | 'PM10' | 'NO2' | 'SO2' | 'CO' | 'O3';

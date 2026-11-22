@@ -4,12 +4,12 @@ export const INDIAN_LOCATIONS: IndianLocation[] = [
   // --- Gurugram (Default Selection) ---
   {
     id: 'gurugram-cyberhub',
-    name: 'Gurugram — Cyber City / DLF',
+    name: 'Gurugram — Vikas Sadan / Cyber City',
     state: 'Haryana (NCR)',
-    stationName: 'Gwal Pahari / Cyber City HSPCB Station',
-    stationCode: 'HR-GUR-02',
-    latitude: 28.4900,
-    longitude: 77.0900,
+    stationName: 'Vikas Sadan HSPCB Continuous CAAQMS #01',
+    stationCode: 'HR-HSPCB-01',
+    latitude: 28.4595,
+    longitude: 77.0266,
     isPreset: true,
     presetPersona: 'parents_young_children',
   },

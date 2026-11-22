@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { AirQualitySnapshot, HouseholdProfile } from '@/types';
 import { Language } from '@/lib/translations';
 
@@ -10,6 +10,8 @@ interface AqiInHeroSectionProps {
   lang: Language;
   onAutoDetectLocation: () => void;
   isLocating: boolean;
+  onRefreshLive?: () => void;
+  isRefreshing?: boolean;
 }
 
 export const AqiInHeroSection: React.FC<AqiInHeroSectionProps> = ({
@@ -18,8 +20,12 @@ export const AqiInHeroSection: React.FC<AqiInHeroSectionProps> = ({
   lang,
   onAutoDetectLocation,
   isLocating,
+  onRefreshLive,
+  isRefreshing,
 }) => {
+  const [standard, setStandard] = useState<'in' | 'us'>('in');
   const aqi = snapshot?.aqi ?? 150;
+  const displayAqi = standard === 'us' && snapshot?.usAqi ? snapshot.usAqi : aqi;
   const pm25Val = snapshot?.pollutants?.pm25?.value ?? Math.round(aqi * 0.7);
   const pm10Val = snapshot?.pollutants?.pm10?.value ?? Math.round(aqi * 0.9);
   const temp = snapshot?.temperatureC ?? 24;
@@ -112,8 +118,52 @@ export const AqiInHeroSection: React.FC<AqiInHeroSectionProps> = ({
           </div>
         </div>
 
-        {/* Right utility buttons: Locate Me, Share */}
-        <div className="flex items-center gap-2 self-start pt-1">
+        {/* Right utility buttons: Standard Switcher, Refresh, Locate Me, Share */}
+        <div className="flex items-center gap-2 self-start flex-wrap pt-1">
+          {/* AQI Standard Switcher like aqi.in */}
+          <div className="flex items-center p-0.5 rounded-full bg-slate-100 border border-slate-200 text-xs font-bold">
+            <button
+              onClick={() => setStandard('in')}
+              className={`px-2.5 py-1 rounded-full transition-all ${
+                standard === 'in'
+                  ? 'bg-sky-600 text-white shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+              type="button"
+              title="CPCB Indian National Air Quality Standard"
+            >
+              AQI-IN
+            </button>
+            <button
+              onClick={() => setStandard('us')}
+              className={`px-2.5 py-1 rounded-full transition-all ${
+                standard === 'us'
+                  ? 'bg-sky-600 text-white shadow-xs'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+              type="button"
+              title="US EPA Air Quality Standard"
+            >
+              AQI-US
+            </button>
+          </div>
+
+          {/* Refresh Live Button */}
+          {onRefreshLive && (
+            <button
+              onClick={onRefreshLive}
+              disabled={isRefreshing}
+              className="px-3 py-1.5 rounded-full bg-slate-100 text-slate-700 hover:bg-slate-200 text-xs font-heading font-semibold flex items-center gap-1.5 border border-slate-200 transition-colors"
+              type="button"
+              title="Bypass cache & fetch fresh real-time sensor reading"
+            >
+              <span className={`material-symbols-outlined text-[16px] text-slate-600 ${isRefreshing ? 'animate-spin' : ''}`}>
+                refresh
+              </span>
+              <span>{isRefreshing ? 'Syncing...' : 'Live Sync'}</span>
+            </button>
+          )}
+
           <button
             onClick={onAutoDetectLocation}
             disabled={isLocating}
@@ -161,10 +211,10 @@ export const AqiInHeroSection: React.FC<AqiInHeroSectionProps> = ({
               </div>
               <div className="flex items-baseline gap-3">
                 <span className="font-heading text-5xl sm:text-6xl font-extrabold text-slate-900 tracking-tight">
-                  {aqi}
+                  {displayAqi}
                 </span>
                 <span className="text-xs text-slate-600 font-bold uppercase tracking-wider">
-                  AQI (IN)
+                  AQI ({standard === 'us' ? 'US' : 'IN'})
                 </span>
               </div>
 
