@@ -1,10 +1,69 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://vayumitra.in';
+
 export const metadata: Metadata = {
-  title: 'AQI VayuMitra (वायुमित्र) — Real-Time Indian Air Quality Index & Protection',
+  metadataBase: new URL(siteUrl),
+  title: {
+    default: 'AQI VayuMitra (वायुमित्र) — Real-Time Indian Air Quality Index & Protection',
+    template: '%s | AQI VayuMitra',
+  },
   description:
-    'Real-time Indian Air Quality Index (AQI), PM2.5, PM10 air pollution levels, and personalized household clean air protection plan.',
+    'Real-time Indian Air Quality Index (AQI), PM2.5 & PM10 monitoring, CPCB-grounded station telemetry, and personalized household clean-air protection protocols.',
+  keywords: [
+    'AQI India',
+    'Air Quality Index Gurugram',
+    'Delhi AQI',
+    'PM2.5 Realtime',
+    'CPCB CAAQMS',
+    'VayuMitra',
+    'Air Pollution Protection',
+    'N95 Mask Guide',
+    'Inversion Safe Window',
+    'PromptWars Challenge 6',
+  ],
+  authors: [{ name: 'VayuMitra Engineering Team' }],
+  creator: 'VayuMitra',
+  publisher: 'VayuMitra Clean Air Initiative',
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'en_IN',
+    url: siteUrl,
+    title: 'AQI VayuMitra — Real-Time Indian Air Quality Index & Protection Plan',
+    description:
+      'Grounded CPCB CAAQMS air quality telemetry, diurnal inversion forecasting, and family clean-air routines for Indian households.',
+    siteName: 'VayuMitra (वायुमित्र)',
+    images: [
+      {
+        url: '/og-image.png',
+        width: 1200,
+        height: 630,
+        alt: 'AQI VayuMitra Dashboard — Real-time Indian Air Quality Index and Household Protection Plan',
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'AQI VayuMitra — Real-Time Indian Air Quality Index & Clean-Air Plan',
+    description:
+      'Live Indian CPCB station telemetry, PM2.5 tracking, and personalized family air protection plans.',
+    images: ['/og-image.png'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
   icons: {
     icon: [
       { url: '/icon.svg', type: 'image/svg+xml' },

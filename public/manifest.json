@@ -1,0 +1,21 @@
+{
+  "name": "AQI VayuMitra (वायुमित्र) — Real-Time Indian Air Quality Index & Protection",
+  "short_name": "VayuMitra",
+  "description": "Real-time Indian Air Quality Index (AQI), PM2.5 monitoring, and personalized household clean-air protection protocols.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#003441",
+  "theme_color": "#003441",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "/favicon.ico",
+      "sizes": "32x32",
+      "type": "image/x-icon"
+    }
+  ]
+}

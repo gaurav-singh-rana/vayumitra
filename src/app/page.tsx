@@ -16,6 +16,7 @@ import { RecommendationHub } from '@/components/RecommendationHub';
 import { HourlyForecastBar } from '@/components/HourlyForecastBar';
 import { MaskDefenseCard } from '@/components/MaskDefenseCard';
 import { AskVayuCopilot } from '@/components/AskVayuCopilot';
+import { Footer } from '@/components/Footer';
 import { BottomNav, NavTab } from '@/components/BottomNav';
 import { INDIAN_LOCATIONS } from '@/lib/indian-cities';
 import { HOUSEHOLD_PERSONAS } from '@/lib/personas';
@@ -292,6 +293,14 @@ export default function HomePage() {
     }
   };
 
+  const handleSelectCityById = (cityId: string) => {
+    const match = INDIAN_LOCATIONS.find((l) => l.id === cityId);
+    if (match) {
+      handleSelectLocation(match);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
   // Handle persona switch
   const handleSelectPersona = (pId: PersonaType) => {
     const prof = HOUSEHOLD_PERSONAS[pId];
@@ -355,6 +364,12 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-[#F8FAFC] text-slate-800">
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-on-primary focus:rounded-lg focus:shadow-lg focus:font-heading focus:text-sm"
+      >
+        Skip to main content
+      </a>
       <Header
         snapshot={snapshot}
         profile={currentProfile}
@@ -363,7 +378,7 @@ export default function HomePage() {
         onOpenCopilot={() => handleOpenCopilot()}
       />
 
-      <main className="w-full max-w-5xl mx-auto pt-20 pb-28 px-4 sm:px-6 space-y-5">
+      <main id="main-content" className="w-full max-w-5xl mx-auto pt-20 pb-16 px-4 sm:px-6 space-y-5">
         {/* Location & Station Status Bar */}
         <LocationBar
           currentLocation={currentLocation}
@@ -449,23 +464,29 @@ export default function HomePage() {
                 />
 
                 {/* 3. 24-Hour Diurnal Breathing Forecast */}
-                <HourlyForecastBar snapshot={snapshot} lang={lang} />
+                <div id="hourly-forecast">
+                  <HourlyForecastBar snapshot={snapshot} lang={lang} />
+                </div>
 
                 {/* 4. Core Personalized Recommendation Hub (Pillars 1, 2, 3 + Verdict + Persona Switcher) */}
                 {plan && (
-                  <RecommendationHub
-                    snapshot={snapshot}
-                    profile={currentProfile}
-                    plan={plan}
-                    lang={lang}
-                    onSelectPersona={handleSelectPersona}
-                    onOpenCopilot={handleOpenCopilot}
-                    onSwitchGlobalTab={(t) => setActiveTab(t)}
-                  />
+                  <div id="recommendations">
+                    <RecommendationHub
+                      snapshot={snapshot}
+                      profile={currentProfile}
+                      plan={plan}
+                      lang={lang}
+                      onSelectPersona={handleSelectPersona}
+                      onOpenCopilot={handleOpenCopilot}
+                      onSwitchGlobalTab={(t) => setActiveTab(t)}
+                    />
+                  </div>
                 )}
 
                 {/* 5. Mask Filtration & Penetration Defense Guide */}
-                <MaskDefenseCard lang={lang} />
+                <div id="mask-guide">
+                  <MaskDefenseCard lang={lang} />
+                </div>
               </>
             )}
 
@@ -509,6 +530,9 @@ export default function HomePage() {
           </div>
         )}
       </main>
+
+      {/* Enterprise Global Footer */}
+      <Footer lang={lang} onSelectCity={handleSelectCityById} />
 
       {/* Floating Action Button for Ask Vayu Copilot */}
       <button
