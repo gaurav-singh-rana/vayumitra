@@ -6,8 +6,11 @@ export const metadata: Metadata = {
   description:
     'Real-time Indian Air Quality Index (AQI), PM2.5, PM10 air pollution levels, and personalized household clean air protection plan.',
   icons: {
-    icon: '/icon.svg',
-    shortcut: '/icon.svg',
+    icon: [
+      { url: '/icon.svg', type: 'image/svg+xml' },
+      { url: '/favicon.ico', sizes: '32x32', type: 'image/x-icon' },
+    ],
+    shortcut: '/favicon.ico',
     apple: '/icon.svg',
   },
   manifest: '/manifest.json',
@@ -29,6 +32,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
+        <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+        <link rel="alternate icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" href="/icon.svg" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
         <link

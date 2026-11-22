@@ -196,25 +196,60 @@ export const AskVayuCopilot: React.FC<AskVayuCopilotProps> = ({
             <span className="material-symbols-outlined text-[14px]">auto_awesome</span> Quick:
           </span>
           <button
-            onClick={() => sendMessage('When is grocery run safe today?')}
+            onClick={() => sendMessage('When is the safe window to open windows today?')}
             className="shrink-0 px-3 py-1 rounded-full bg-surface-container-lowest shadow-xs hover:bg-surface-container text-primary font-heading text-xs transition-all border border-surface-container"
             type="button"
           >
-            🛒 Safe grocery run hours?
+            🪟 Windows open timing?
           </button>
           <button
-            onClick={() => sendMessage('What is the bedtime protection protocol for mild wheezing?')}
+            onClick={() => sendMessage('What is the kitchen tadka 3-minute smoke rule?')}
+            className="shrink-0 px-3 py-1 rounded-full bg-surface-container-lowest shadow-xs hover:bg-surface-container text-primary font-heading text-xs transition-all border border-surface-container"
+            type="button"
+          >
+            🍳 Kitchen tadka rule
+          </button>
+          <button
+            onClick={() => sendMessage('Which mask should I wear? Is cloth mask enough?')}
+            className="shrink-0 px-3 py-1 rounded-full bg-surface-container-lowest shadow-xs hover:bg-surface-container text-primary font-heading text-xs transition-all border border-surface-container"
+            type="button"
+          >
+            😷 N95 vs Cloth mask
+          </button>
+          <button
+            onClick={() => sendMessage(`Can ${profile.name} play outside or attend morning assembly?`)}
+            className="shrink-0 px-3 py-1 rounded-full bg-surface-container-lowest shadow-xs hover:bg-surface-container text-primary font-heading text-xs transition-all border border-surface-container"
+            type="button"
+          >
+            🧒 {profile.name} outdoor safety?
+          </button>
+          <button
+            onClick={() => sendMessage('What is the bedtime protection protocol for mild wheezing and seniors?')}
             className="shrink-0 px-3 py-1 rounded-full bg-surface-container-lowest shadow-xs hover:bg-surface-container text-primary font-heading text-xs transition-all border border-surface-container"
             type="button"
           >
             🛏️ Bedtime wheeze protocol
           </button>
           <button
+            onClick={() => sendMessage('How to commute safely to office in car or metro?')}
+            className="shrink-0 px-3 py-1 rounded-full bg-surface-container-lowest shadow-xs hover:bg-surface-container text-primary font-heading text-xs transition-all border border-surface-container"
+            type="button"
+          >
+            🚗 Car AC &amp; commute
+          </button>
+          <button
             onClick={() => sendMessage('DIY fan + HEPA purifier tutorial')}
             className="shrink-0 px-3 py-1 rounded-full bg-surface-container-lowest shadow-xs hover:bg-surface-container text-primary font-heading text-xs transition-all border border-surface-container"
             type="button"
           >
-            🌬️ DIY ₹1,200 air purifier
+            🌬️ DIY ₹1,200 purifier
+          </button>
+          <button
+            onClick={() => sendMessage('What is VayuMitra and why is it better than normal weather apps?')}
+            className="shrink-0 px-3 py-1 rounded-full bg-surface-container-lowest shadow-xs hover:bg-surface-container text-primary font-heading text-xs transition-all border border-surface-container"
+            type="button"
+          >
+            🏆 Why VayuMitra?
           </button>
         </div>
 
