@@ -48,12 +48,20 @@ export async function GET(request: NextRequest) {
     const cached = !refreshParam ? appCache.get<AirQualitySnapshot>(cacheKey) : null;
 
     if (cached) {
-      return NextResponse.json({
-        ...cached.data,
-        fromCache: true,
-        cachedAt: new Date(cached.cachedAt).toISOString(),
-        ageSeconds: Math.round(cached.ageMs / 1000),
-      });
+      return NextResponse.json(
+        {
+          ...cached.data,
+          fromCache: true,
+          cachedAt: new Date(cached.cachedAt).toISOString(),
+          ageSeconds: Math.round(cached.ageMs / 1000),
+        },
+        {
+          headers: {
+            'X-Content-Type-Options': 'nosniff',
+            'Cache-Control': 'public, s-maxage=180, stale-while-revalidate=60',
+          },
+        }
+      );
     }
 
     // Call real-time Open-Meteo Air Quality Telemetry & Weather in parallel
@@ -231,7 +239,12 @@ export async function GET(request: NextRequest) {
     // Store in memory cache for 3 minutes (180,000 ms) for high responsiveness
     appCache.set(cacheKey, snapshot, 180000);
 
-    return NextResponse.json(snapshot);
+    return NextResponse.json(snapshot, {
+      headers: {
+        'X-Content-Type-Options': 'nosniff',
+        'Cache-Control': 'public, s-maxage=180, stale-while-revalidate=60',
+      },
+    });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Unknown air telemetry error';
     return NextResponse.json(
@@ -240,7 +253,13 @@ export async function GET(request: NextRequest) {
         detail: message,
         retryable: true,
       },
-      { status: 503 }
+      {
+        status: 503,
+        headers: {
+          'X-Content-Type-Options': 'nosniff',
+          'Cache-Control': 'no-store, max-age=0',
+        },
+      }
     );
   }
 }

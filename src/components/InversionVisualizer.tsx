@@ -181,7 +181,7 @@ export const InversionVisualizer: React.FC<InversionVisualizerProps> = ({ lang }
               </div>
 
               {/* Trapped Bouncing Soot Particles SVG */}
-              <svg className="w-full h-24" viewBox="0 0 600 100" fill="none">
+              <svg className="w-full h-24" viewBox="0 0 600 100" fill="none" aria-hidden="true">
                 {/* Particulate Smoke Clouds bouncing back down */}
                 <g opacity="0.8">
                   <circle cx="80" cy="40" r="14" fill="#ef4444" fillOpacity="0.4" className="animate-ping" />
@@ -202,7 +202,7 @@ export const InversionVisualizer: React.FC<InversionVisualizerProps> = ({ lang }
             /* CONVECTIVE THERMAL PLUMES (CLEAN AIR DISPERSION) */
             <div className="space-y-2">
               {/* Upward Convection Arrows and Ascending Plumes */}
-              <svg className="w-full h-28" viewBox="0 0 600 110" fill="none">
+              <svg className="w-full h-28" viewBox="0 0 600 110" fill="none" aria-hidden="true">
                 <defs>
                   <linearGradient id="upDraft" x1="0" y1="1" x2="0" y2="0">
                     <stop offset="0%" stopColor="#10b981" stopOpacity="0.2" />

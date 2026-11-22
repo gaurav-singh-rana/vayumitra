@@ -27,12 +27,12 @@ export async function generateGuidancePlan(
         if (plan && plan.verdict && plan.routineItems && plan.routineItems.length > 0) {
           return plan;
         }
-      } catch (geminiErr) {
-        console.warn('Gemini guidance fallback to rules:', geminiErr);
+      } catch {
+        // Fall through to deterministic rule-based plan
       }
     }
-  } catch (err) {
-    console.warn('Guidance plan generation fallback:', err);
+  } catch {
+    // Fall through to deterministic rule-based plan
   }
 
   // Grounded environmental science rule engine (100% deterministic & guaranteed)

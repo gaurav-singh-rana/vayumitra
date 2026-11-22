@@ -37,7 +37,12 @@ export async function POST(request: NextRequest) {
       try {
         const geminiResponse = await callGeminiChat(apiKey, cleanPrompt, profile, snapshot);
         if (geminiResponse) {
-          return NextResponse.json(geminiResponse);
+          return NextResponse.json(geminiResponse, {
+            headers: {
+              'X-Content-Type-Options': 'nosniff',
+              'Cache-Control': 'no-store, max-age=0',
+            },
+          });
         }
       } catch {
         // Fallback to grounded local intelligence
@@ -46,12 +51,23 @@ export async function POST(request: NextRequest) {
 
     // High-intelligence grounded local reasoning engine
     const localResponse = generateGroundedLocalAnswer(cleanPrompt, profile, snapshot);
-    return NextResponse.json(localResponse);
+    return NextResponse.json(localResponse, {
+      headers: {
+        'X-Content-Type-Options': 'nosniff',
+        'Cache-Control': 'no-store, max-age=0',
+      },
+    });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : 'Chat copilot error';
     return NextResponse.json(
       { error: "Couldn't answer right now; please try again.", detail: message },
-      { status: 500 }
+      {
+        status: 500,
+        headers: {
+          'X-Content-Type-Options': 'nosniff',
+          'Cache-Control': 'no-store, max-age=0',
+        },
+      }
     );
   }
 }

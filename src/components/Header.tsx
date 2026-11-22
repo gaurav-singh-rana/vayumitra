@@ -60,7 +60,7 @@ export const Header: React.FC<HeaderProps> = ({
           {/* Logo Mark Icon */}
           <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-sky-500 via-teal-500 to-emerald-500 p-0.5 shadow-sm flex items-center justify-center flex-shrink-0">
             <div className="w-full h-full bg-slate-900 rounded-[10px] flex items-center justify-center">
-              <svg className="w-6 h-6" viewBox="0 0 32 32" fill="none">
+              <svg className="w-6 h-6" viewBox="0 0 32 32" fill="none" aria-hidden="true">
                 <circle cx="16" cy="16" r="12" stroke="#38bdf8" strokeWidth="1.5" strokeDasharray="2 2" opacity="0.6" />
                 <path d="M8 14 C12 9, 22 9, 25 13 C 27 16, 26 21, 22 23 C 18 25, 12 24, 11 20 C 10 17, 13 14, 16 14 C 19 14, 21 16, 20 18" stroke="#34d399" strokeWidth="2.5" strokeLinecap="round" />
                 <circle cx="16" cy="16" r="2.5" fill="#ffffff" />

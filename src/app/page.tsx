@@ -101,8 +101,7 @@ export default function HomePage() {
       } else {
         throw new Error(data?.error || 'Failed to generate guidance plan');
       }
-    } catch (err) {
-      console.warn('Guidance API fallback to local engine:', err);
+    } catch {
       // Resilient client-side fallback
       const safeAqi = snap?.aqi ?? 150;
       const isSevere = safeAqi >= 300;

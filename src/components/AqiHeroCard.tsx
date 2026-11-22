@@ -100,7 +100,7 @@ export const AqiHeroCard: React.FC<AqiHeroCardProps> = ({ snapshot, profile, lan
             className="relative flex-shrink-0 w-24 h-24 flex items-center justify-center"
             aria-hidden="true"
           >
-            <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100">
+            <svg className="w-full h-full -rotate-90" viewBox="0 0 100 100" aria-hidden="true">
               <circle
                 className="text-surface-container"
                 cx="50"

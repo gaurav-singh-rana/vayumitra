@@ -59,7 +59,7 @@ export const DirectImpact: React.FC<DirectImpactProps> = ({
         <div className="flex items-center gap-5">
           {/* SVG Circular Progress Ring */}
           <div className="relative w-20 h-20 sm:w-24 sm:h-24 flex-shrink-0 flex items-center justify-center">
-            <svg className="w-full h-full -rotate-90" viewBox="0 0 96 96">
+            <svg className="w-full h-full -rotate-90" viewBox="0 0 96 96" aria-hidden="true">
               <circle
                 className="text-slate-100"
                 cx="48"

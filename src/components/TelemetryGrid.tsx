@@ -31,7 +31,7 @@ export const TelemetryGrid: React.FC<TelemetryGridProps> = ({ snapshot }) => {
           </div>
           {/* Wave sparkline SVG */}
           <div className="w-full h-5 pt-1" aria-hidden="true">
-            <svg className="w-full h-full text-error" fill="none" viewBox="0 0 100 24">
+            <svg className="w-full h-full text-error" fill="none" viewBox="0 0 100 24" aria-hidden="true">
               <path
                 d="M0 18 Q 15 22, 30 14 T 60 16 T 85 6 L 100 8"
                 fill="none"

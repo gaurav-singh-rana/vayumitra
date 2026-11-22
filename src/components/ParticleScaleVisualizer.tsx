@@ -210,7 +210,7 @@ export const ParticleScaleVisualizer: React.FC<ParticleScaleVisualizerProps> = (
             {/* Left: Respiratory Tract SVG Simulation */}
             <div className="relative w-48 h-48 flex items-center justify-center shrink-0">
               {/* Pulsating Alveolus Sac Bulb */}
-              <svg className="w-full h-full" viewBox="0 0 160 160" fill="none">
+              <svg className="w-full h-full" viewBox="0 0 160 160" fill="none" aria-hidden="true">
                 {/* Trachea & Bronchi */}
                 <path d="M80 15 L80 50 M80 50 Q60 70 45 95 M80 50 Q100 70 115 95" stroke="#38bdf8" strokeWidth="6" strokeLinecap="round" />
 

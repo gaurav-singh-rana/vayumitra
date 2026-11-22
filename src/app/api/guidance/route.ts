@@ -36,9 +36,13 @@ export async function POST(request: NextRequest) {
     // Cache guidance for 15 minutes
     appCache.set(cacheKey, plan);
 
-    return NextResponse.json(plan);
-  } catch (err: unknown) {
-    console.error('ERROR IN /api/guidance, returning resilient fallback:', err);
+    return NextResponse.json(plan, {
+      headers: {
+        'X-Content-Type-Options': 'nosniff',
+        'Cache-Control': 'public, s-maxage=900, stale-while-revalidate=300',
+      },
+    });
+  } catch {
     try {
       const profile = HOUSEHOLD_PERSONAS.parents_young_children;
       const fallbackSnapshot: AirQualitySnapshot = {
